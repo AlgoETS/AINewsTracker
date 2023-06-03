@@ -45,3 +45,23 @@ AINewsTracker aggregates financial news from multiple trusted sources globally a
 - Canada: CBC News - Business, The Globe and Mail - Business, Financial Post, BNN Bloomberg, TSX.
 
 Visit our [News Sources](https://www.ainewstracker.com/news-sources) page for more information on each source, including RSS/API links and the website URL.
+
+## Start the application on local mode
+
+First of all, you have to install all the dependecies :
+```
+pip install -r requirements.txt
+```
+Create a `.env` file where you copy the content of the `.env.example` file (make sure to replace the link by your own mongodb link)
+
+Start the server with this command :
+```
+uvicorn app.main:app --reload
+```
+
+Then you can tryout the api by clicking [here](http://127.0.0.1:8000/docs) .
+
+
+
+
+
