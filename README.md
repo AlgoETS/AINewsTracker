@@ -37,39 +37,9 @@ uvicorn app.main:app --reload
 - **Backtesting capabilities**: Explore the influence of past news on market behavior and verify your predictive models.
 - **Versatile data sources**: Gain insights from a wide range of international and regional news providers.
 
-## API Usage
-
-We are utilizing the `gnews.io` API to search for current and historic news articles. Here is an example Python code snippet for API usage:
-
-```python
-import requests
-
-apikey = 'API_KEY'
-url = 'https://gnews.io/api/v4/search?q=example&lang=en&country=us&max=10&apikey=' + apikey
-
-response = requests.get(url)
-data = response.json()
-articles = data['articles']
-
-for article in articles:
-    print("Title: ", article['title'])
-    print("Description: ", article['description'])
-```
-This code retrieves the top 10 English news articles from the US related to the query 'example'.
-
-## Database Structure
-
-![DB](https://github.com/AlgoETS/AINewsTracker/assets/13888068/7d054b2b-218a-4be8-a3d0-dd366b3f044b)
-
 ## News Sources
 
 AINewsTracker aggregates financial news from multiple trusted sources globally and regionally. Below is a list of these sources:
-
-- International: Yahoo Finance, Reuters, Investing.com, MarketWatch, Financial Times, The Wall Street Journal.
-- Canada (Québec): La Presse - Affaires, Le Journal de Montréal - Argent, Radio-Canada - Économie, TVA Nouvelles - Argent, Les Affaires.
-- Canada: CBC News - Business, The Globe and Mail - Business, Financial Post, BNN Bloomberg, TSX.
-
-Visit our [News Sources](https://www.ainewstracker.com/news-sources) page for more information on each source, including RSS/API links and the website URL.
 
 ## Start the application on local mode
 
@@ -87,6 +57,58 @@ uvicorn app.main:app --reload
 Then you can tryout the api by clicking [here](http://127.0.0.1:8000/docs) .
 
 
+## File Structure
 
-
-
+```
+├── AINewsTracker.svg
+├── AINewsTracker_transparent.svg
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── Test-AI.ipynb
+├── app
+│   ├── __init__.py
+│   ├── config.py
+│   ├── database
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   └── db.py
+│   ├── favicon.ico
+│   ├── main.py
+│   ├── models
+│   │   ├── RSSFeed.py
+│   │   ├── __init__.py
+│   │   ├── article.py
+│   │   ├── company.py
+│   │   ├── score.py
+│   │   └── users.py
+│   ├── routers
+│   │   ├── RSSFeed.py
+│   │   ├── __init__.py
+│   │   ├── article.py
+│   │   ├── company.py
+│   │   └── users.py
+│   └── services
+│       ├── __init__.py
+│       ├── article.py
+│       ├── company.py
+│       ├── crypto.py
+│       ├── rss.py
+│       ├── sentiments.py
+│       └── summary.py
+├── deploy
+│   ├── README.md
+│   └── docker-compose.yml
+├── docker-compose.yml
+├── monitoring
+├── pyproject.toml
+├── requirements-dev.txt
+├── requirements.txt
+├── tests
+│   ├── __init__.py
+│   └── test_app.py
+└── wiki
+    ├── CODE_OF_CONDUCT.md
+    ├── ISSUES.md
+    └── WORKFLOW.md
+```
