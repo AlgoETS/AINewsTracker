@@ -2,7 +2,7 @@
 name = "AINewsTracker"
 version = "0.1.0"
 description = "A web application for backtesting the influence of financial news on the stock market using AI."
-authors = ["Antoine Boucher <antoine.boucher012@gmail.com>"],
+authors = ["Antoine Boucher <antoine.boucher012@gmail.com>"]
 readme = "README.md"
 license = "MIT"
 
@@ -43,9 +43,9 @@ vaderSentiment = "^3.3.2"
 yfinance = "^0.2.12"
 yahoofinancials = "^1.14"
 pyvalet = "^0.1"
-motor = "^2.5.1"
-discordpy = "^2.2.2"
+motor = "*"
 python-binance = "*"
+rich = "*"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"
