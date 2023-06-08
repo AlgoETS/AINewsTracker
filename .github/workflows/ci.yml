@@ -1,0 +1,39 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: CI
+
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - feature/*
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+      BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+      BINANCE_API_SECRET_KEY: ${{ secrets.BINANCE_API_SECRET_KEY }}
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pip install poetry && poetry install --with dev,extras && pip install -r requirements.txt
+      - name: Run tests
+        run: poetry run pytest
+      - name: Run linters
+        run: poetry run black --check .
+      - name: Run security checks
+        run: poetry run bandit -r .
+      - name: Run type checks
+        run: poetry run mypy .
+      - name: Run coverage
+        run: poetry run coverage run -m pytest && poetry run coverage report -m
+      - name: Run docs
+        run: poetry run sphinx-build -b html docs/source docs/build
+      - name: run app wait then close
+        run: uvicorn app.main:app --reload --port 8000 & sleep 5 && kill $!

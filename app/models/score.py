@@ -8,7 +8,7 @@ class Score(BaseModel):
     sentiment_score: float
     sentiment: str
     article_id: str
-      
+
 def create_score(score: Score):
     score_dict = score.dict()
     score_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string

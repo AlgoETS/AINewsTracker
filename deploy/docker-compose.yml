@@ -1,0 +1,80 @@
+version: "3.8"
+
+services:
+  ainewstracker:
+    container_name: ainewstracker
+    build: ..
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis
+    ports:
+      - 8000:8000
+    command: uvicorn app.main:app --host
+    networks:
+      dashboard:
+        ipv4_address: 172.168.0.6
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    environment:
+      - REDIS_PASSWORD=redis
+    ports:
+      - 6379:6379
+    networks:
+      dashboard:
+        ipv4_address: 172.16.238.7
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    ports:
+      - 27017:27017
+    networks:
+      dashboard:
+        ipv4_address: 172.16.238.8
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      dashboard:
+        ipv4_address: 172.16.238.9
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config/datasource.yml:/etc/grafana/provisioning/datasource.yml
+    env_file:
+      - ./config.monitoring
+    networks:
+      dashboard:
+        ipv4_address: 172.16.238.10
+
+networks:
+  dashboard:
+    name: dashboard
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
