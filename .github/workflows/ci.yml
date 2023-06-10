@@ -36,10 +36,6 @@ jobs:
           pip install genbadge
           poetry install
 
-      - name: Build package
-        run: |
-          poetry build
-
       - name: Run linting
         run: poetry run black --check .
 
