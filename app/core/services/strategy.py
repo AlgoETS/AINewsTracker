@@ -1,10 +1,15 @@
+from typing import Callable, List
+import httpx
+from app.core.database import MongoDB
+
+
 def execute_trading_strategy(
-    companies_to_follow: list, 
-    fetch_news: callable, 
-    analyze_sentiment: callable, 
-    buy_stock: callable, 
-    sell_stock: callable, 
-    sentiment_threshold: float, 
+    companies_to_follow: List[str],
+    fetch_news: Callable[[str], List[dict]],
+    analyze_sentiment: Callable[[dict], float],
+    buy_stock: Callable[[str], None],
+    sell_stock: Callable[[str], None],
+    sentiment_threshold: float,
     buy_sell_percentage: float
 ):
     for company in companies_to_follow:
@@ -15,7 +20,7 @@ def execute_trading_strategy(
 
         for article in news_articles:
             sentiment_score = analyze_sentiment(article)
-            
+
             if sentiment_score > sentiment_threshold:
                 positive_count += 1
             elif sentiment_score < -sentiment_threshold:

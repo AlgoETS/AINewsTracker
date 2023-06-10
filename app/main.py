@@ -1,16 +1,37 @@
-from fastapi import FastAPI
+# -*- coding: utf-8 -*-
+import logging
+import os
+from datetime import datetime, timedelta
+
+import aiofiles
+import uvicorn
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from fastapi_health import health
-import uvicorn
 from prometheus_fastapi_instrumentator import Instrumentator
 
+from app.core.telemetry.prometheus import check_prometheus_health
+
+from .__version__ import __version__
+from .config import Settings
+from .core.database import MongoDB, RedisDB
+from .core.logging import Logger
 
 # import all routers
-from .routers import users
-from .routers import company
+from .routers import company, users
+
+startup_time = datetime.now()
+
+# Depending on the environment variable ENV_FILE, the respective .env file is loaded. If ENV_FILE is not set, the default .env file is loaded.
+env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else ".env"
+
+settings = Settings(env_file)
+
+logger = Logger(logging.INFO).get_logger()
 
 swagger_ui_parameters = {
     "dom_id": "#swagger-ui",
@@ -21,11 +42,11 @@ swagger_ui_parameters = {
     "syntaxHighlight.theme": "obsidian",
 }
 
-# init app
+# Init app
 app = FastAPI(
     title="AI News Tracker API",
     description="AI News Tracker API",
-    version="0.0.1",
+    version=__version__,
     openapi_url="/api/v1/openapi.json",
     docs_url="/api/v1/docs",
     swagger_ui_parameters=swagger_ui_parameters,
@@ -46,74 +67,128 @@ app.add_middleware(
 )
 
 # add cache middleware to app
-@cache()
-async def get_cache() -> int:
-    """Get cache TTL from config.
-    Returns:
-        int: Cache TTL
-    """
-    return 1
+redis_instance = RedisDB()
+
 
 @app.on_event("startup")
 async def startup():
-    # redis = init_redis_pool("localhost", "")
-    # FastAPICache.init(backend=RedisBackend(redis), prefix="fastapi-cache")
-    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    global startup_time
+    startup_time = datetime.now()
+    logger.info("Starting up application...")
+
+    try:
+        FastAPICache.init(
+            backend=RedisBackend(redis_instance._connection), prefix="redis-cache"
+        )
+    except Exception:
+        logger.error("Redis server not available")
+        FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
 
 
-def healthy():
-    # get basic metric about fastapi app
-    return True
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Shutting down application...")
 
-def sick():
-    return False
+
+def get_service_health(check_function, get_info_function, service_name_function):
+    try:
+        is_healthy = check_function()
+        service_info = get_info_function() or {"version": "unknown", "uptime": "unknown"}
+        uptime = service_info.get("uptime", "unknown")
+        service_name = service_name_function() or service_name_function or "Unknown"
+        if "uptime" in service_info and service_info["uptime"] is not None and service_info["uptime"] != "unknown":
+            service_info["uptime"] = (datetime.now() - datetime.fromtimestamp(service_info["uptime"])).total_seconds()
+        else:
+            service_info["uptime"] = "unknown"
+    except Exception as e:
+        is_healthy = False
+        service_info = {"version": "unknown", "uptime": "unknown"}
+        service_name = "Unknown"
+
+    version = service_info.get("version", "unknown")
+    uptime = service_info.get("uptime", "unknown")
+
+    return {
+        "status": "ok" if is_healthy else "unavailable",
+        "version": version,
+        "uptime": uptime,
+        "hostname": service_name,
+        "environment": settings.ENVIRONMENT,
+    }
+
 
 @app.get("/health", tags=["Health"])
-def read_health():
-    if health([healthy, sick]):
+async def read_health():
+    try:
+        prometheus_health = get_service_health(
+            check_prometheus_health,
+            lambda: {"version": "2.26.0", "uptime": (datetime.now() - startup_time).total_seconds()},
+            "localhost"
+        )
+        print(prometheus_health)
+
+        redis_health = get_service_health(
+            redis_instance.check_connection,
+            redis_instance.get_info,
+            redis_instance.get_hostname()
+        )
+        print(redis_health)
+
+        mongodb_instance = MongoDB()
+        print("MongoDB get_info:", mongodb_instance.get_info())
+        print("MongoDB get_hostname:", mongodb_instance.get_client().address[0])
+
+        mongodb_health = get_service_health(
+            mongodb_instance.check_connection,
+            mongodb_instance.get_info,
+            mongodb_instance.get_client().address[0]
+        )
+        print(mongodb_health)
+
         return {
-        "status": "ok",
-        "version": "0.1.0",
-        "uptime": 10,
-        "hostname": "localhost",
-        "environment": "dev",
-        "dependencies": {
-            "redis": {
-                "status": "ok",
-                "version": "6.0.9",
-                "uptime": 10,
-                "hostname": "localhost",
-                "environment": "dev",
+            "status": "ok",
+            "version": __version__,
+            "uptime": (datetime.now() - startup_time).total_seconds(),
+            "hostname": settings.HOST,
+            "environment": settings.ENVIRONMENT,
+            "dependencies": {
+                "redis": redis_health,
+                "mongodb": mongodb_health,
+                "prometheus": prometheus_health,
             },
-            "mongodb": {
-                "status": "ok",
-                "version": "4.4.6",
-                "uptime": 10,
-                "hostname": "localhost",
-                "environment": "dev",
-            },
-            "prometheus": {
-                "status": "ok",
-                "version": "2.26.0",
-                "uptime": 10,
-                "hostname": "localhost",
-                "environment": "dev",
-            },
-        },
-    }
-    return {"status": "sick"}
+        }
+    except Exception as e:
+        print(e)
+        logger.error(f"Health check failed due to {str(e)}")
+        raise HTTPException(status_code=503, detail=str(e)) from e
 
 
-# this is command to run the server : uvicorn app.main:app --reload~
+@app.get("/favicon.ico", tags=["Static"])
+async def favicon():
+    file_path = os.path.join(os.path.dirname(
+        __file__), "static", "favicon.ico")
+    async with aiofiles.open(file_path, mode="rb") as f:
+        content = await f.read()
+    return Response(content, media_type="image/x-icon")
+
+
 @app.get("/", tags=["Root"])
 @cache(expire=60)
 def read_root():
+    logger.info("AI News Tracker API")
     return "AI News Tracker API"
 
 
-def start(host: str = "0.0.0.0", port: int = 8000,reload: bool = True):
+def start(host: str = "0.0.0.0", port: int = 8000, reload: bool = True):
     """Launched with `poetry run start` at root level"""
-    uvicorn.run("app.app:app", host=host, port=port, reload=reload, workers=2)
+    uvicorn.run(
+        "app.main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.RELOAD,
+        workers=4,
+    )
+
 
 if __name__ == "__main__":
     Instrumentator().instrument(app).expose(app)

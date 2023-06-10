@@ -25,7 +25,7 @@ jobs:
         with:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-          
+
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -34,11 +34,20 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install
-          pip install pytest
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Run tests
         run: poetry run pytest
+
+  app:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Run app (briefly)
         run: |
-          uvicorn app.main:app --reload --port 8000 & 
-          sleep 5 && 
+          uvicorn app.main:app --reload --port 8000 &
+          sleep 5 &&
           kill $!

@@ -30,9 +30,3 @@ repos:
         - "--config=.tflint.hcl"
     - id: terraform-validate
     - id: terraform-fmt
--   repo: git://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.77.1
-    hooks:
-    - id: terraform_tfsec
-    - id: terraform_docs
-    - id: checkov

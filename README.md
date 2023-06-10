@@ -16,26 +16,7 @@
 
 ## What is AINewsTracker?
 
-AINewsTracker is a powerful web application dedicated to backtesting the influence of financial news on the stock market. Leveraging AI to sort, filter, and analyze financial news from various reliable international and regional sources, it enables users to observe and predict potential impacts on market trends.
-
-## How to use
-
-1. Setup and activate the Python environment of your choice.
-2. Run the following command to install the required dependencies:
-
-```shell
-pip install poetry
-poetry install
-pip install -r requirements.txt
-
-
-```
-
-3. Run the following command to launch FastAPI in development mode:
-
-```shell
-uvicorn app.main:app --reload
-```
+AINewsTracker is a sophisticated web application that backtests the influence of financial news on the stock market. It utilizes artificial intelligence to categorize, filter, and analyze financial news from a variety of trustworthy international and regional sources. This allows users to monitor and predict potential impacts on market trends.
 
 ## Features
 
@@ -48,79 +29,96 @@ uvicorn app.main:app --reload
 
 AINewsTracker aggregates financial news from multiple trusted sources globally and regionally. Below is a list of these sources:
 
-## Start the application on local mode
 
-First of all, you have to install all the dependecies :
-```
-pip install -r requirements.txt
-```
-Create a `.env` file where you copy the content of the `.env.example` file (make sure to replace the link by your own mongodb link)
 
-Start the server with this command :
-```
-uvicorn app.main:app --reload
+## How to use
+
+1. Setup and activate the Python environment of your choice.
+2. Run the following command to install the required dependencies:
+
+```shell
+pip install poetry
+poetry shell
+poetry install
 ```
 
-Then you can tryout the api by clicking [here](http://127.0.0.1:8000/docs) .
+3. Test the application by running the following command:
 
+```shell
+poetry run pytest
+```
+
+4. Run the following command to launch FastAPI in development mode:
+
+```shell
+poetry run uvicorn app.main:app --reload
+```
+
+5. Dockerize the application by running the following command:
+
+```shell
+docker-compose up --build
+```
+
+### Documentation
+
+The documentation of the API is available at the following URL: http://localhost:8000/api/v1/docs
 
 ## File Structure
 
 ```shell
-├── AINewsTracker.svg  # Project's logo in SVG format
-├── AINewsTracker_transparent.svg  # Project's logo in SVG format with a transparent background
-├── Dockerfile  # Instructions for Docker to build an image for the application
-├── LICENSE  # The license of the project
-├── README.md  # Overview and general documentation of the project
-├── Test-AI.ipynb  # Jupyter notebook file for testing AI functionalities
-├── app  # Main directory for the application source code
-│   ├── __init__.py  # Python file for package initialization
-│   ├── config.py  # Configuration settings for the application
-│   ├── database  # Directory for database-related modules
-│   │   ├── __init__.py  # Python file for package initialization
-│   │   ├── config.py  # Configuration settings for the database
-│   │   └── db.py  # Main database module (connection, queries, etc.)
-│   ├── favicon.ico  # Favicon for the application when deployed on a web server
-│   ├── main.py  # Entry point of the application
-│   ├── models  # Directory for data models
-│   │   ├── RSSFeed.py  # Model for RSS Feed data
-│   │   ├── __init__.py  # Python file for package initialization
-│   │   ├── article.py  # Model for Article data
-│   │   ├── company.py  # Model for Company data
-│   │   ├── score.py  # Model for Score data
-│   │   └── users.py  # Model for User data
-│   ├── routers  # Directory for route handlers (FastAPI)
-│   │   ├── RSSFeed.py  # Route handlers for RSS Feed related operations
-│   │   ├── __init__.py  # Python file for package initialization
-│   │   ├── article.py  # Route handlers for Article related operations
-│   │   ├── company.py  # Route handlers for Company related operations
-│   │   └── users.py  # Route handlers for User related operations
-│   └── services  # Directory for service functions/modules
-│       ├── __init__.py  # Python file for package initialization
-│       ├── article.py  # Service functions for Article related operations
-│       ├── company.py  # Service functions for Company related operations
-│       ├── crypto.py  # Service functions for Crypto related operations
-│       ├── rss.py  # Service functions for RSS Feed related operations
-│       ├── sentiments.py  # Service functions for Sentiment analysis operations
-│       └── summary.py  # Service functions for Summary related operations
-├── deploy  # Directory for deployment-related files
-│   ├── README.md  # Deployment instructions
-│   └── docker-compose.yml  # Docker Compose file for setting up the production environment
-├── docker-compose.yml  # Docker Compose file for setting up the development environment
-├── monitoring  # Directory for monitoring-related modules (expected to be filled with relevant files)
-├── pyproject.toml  # Configuration file for Python project packaging (Poetry)
-├── requirements-dev.txt  # List of Python dependencies needed in the development environment
-├── requirements.txt  # List of Python dependencies needed in the production environment
-├── tests  # Directory for test modules
-│   ├── __init__.py  # Python file for package initialization
-│   └── test_app.py  # Test cases for the application
-└── wiki  # Directory for project's wiki
-    ├── CODE_OF_CONDUCT.md  # Code of Conduct for project contributors
-    ├── ISSUES.md  # Instructions for reporting issues
-    └── WORKFLOW.md  # Guidelines for project workflow
+# AINewsTracker.svg & AINewsTracker_transparent.svg: Logo or graphic resources
+# app: Main application code directory
+# ├── config.py: File that contains the configuration settings of the application
+# ├── core: Directory that includes essential parts of the application
+# ├── ├── database: Includes scripts for managing database connections
+# ├── ├── ├── db.py: Main database module containing connection settings, queries, etc.
+# ├── ├── logging.py: File that sets up the logging for the application
+# ├── ├── repo: Directory that contains scripts for database operations
+# ├── ├── services: Contains service functions for different operations
+# ├── ├── telemetry: Directory containing scripts for system logging and monitoring
+# ├── main.py: Entry point of the application
+# ├── models: Directory containing the data models used by the application
+# ├── routers: Directory containing FastAPI routers (request handling logic)
+# ├── static: Contains static files (images, CSS, JavaScript, etc.)
+# ├── __version__.py: File that contains the version number of the application
+# CODE_OF_CONDUCT.md: Markdown file outlining the code of conduct for the project
+# CONTRIBUTING.md: Markdown file outlining the guidelines for contributing to the project
+# deploy: Directory for deployment-related files and scripts
+# ├── docker-compose.yml: Docker Compose file for setting up the production environment
+# ├── README.md: Markdown file with instructions for deploying the application
+# docker-compose.yml: Docker Compose file for setting up the development environment
+# Dockerfile: Contains instructions for Docker to build an image for the application
+# LICENSE: The license of the project
+# monitoring: Contains configuration files for monitoring tools
+# poetry.lock & pyproject.toml: Configuration files for Python project and dependency management (Poetry)
+# README.md: General project documentation and overview
+# renovate.json: Configuration file for Renovate (automates dependency updates)
+# requirements-dev.txt & requirements.txt: Python dependencies for development and production environments
+# SECURITY.md: Markdown file outlining the security policy of the project
+# Test-AI.ipynb: A Jupyter notebook file for testing AI functionalities
+# tests: Directory for test modules
+# wiki: Directory for additional project documentation or guides
 
 ```
 
 ## TODO
 
-- [ ] Add a new endpoint to get the news from a specific company
+- [X] Add a new endpoint to get the news from a specific company
+- [X] Implement caching to improve performance for frequently accessed data
+- [ ] Add user authentication and role-based access control for secure endpoints
+- [ ] Implement unit and integration testing to ensure the stability of the application
+- [ ] Add pagination to news feed endpoints to limit the amount of data returned
+- [X] Improve error handling and send descriptive error messages
+- [X] Implement a logging system to keep track of user activity and system status
+- [X] Enhance the database schema to include additional relevant fields for the articles
+- [ ] Add an endpoint for users to subscribe to specific companies or news tags
+- [ ] Implement a system for sending daily/weekly email updates for subscribed users
+- [ ] Add multi-language support for international users
+- [ ] Create a mechanism to rate-limit requests to protect the API from abuse
+- [ ] Optimize database queries to improve performance
+- [ ] Implement a backup system for the database
+- [X] Write detailed API documentation for end-users and developers
+- [X] Refactor and clean up the codebase for better maintainability
+- [ ] Implement real-time updates using WebSockets
+- [X] Add analytics features for tracking user behavior and system performance
