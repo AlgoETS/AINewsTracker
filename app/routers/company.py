@@ -1,22 +1,34 @@
-from pydantic import BaseModel
-from bson import ObjectId
-from .models import Company
-from .database import collection_companies
-router = APIRouter()
+# -*- coding: utf-8 -*-
+from fastapi import APIRouter, HTTPException
 
-@router.post("/companies")
-def create_company(company: Company):
-    company_dict = company.dict()
-    company_dict["_id"] = str(ObjectId())
-    result = collection_companies.insert_one(company_dict)
-    return result.inserted_id
+from app.core.repo.company import (
+    create_company,
+    get_all_companies,
+    get_company_by_ticker,
+)
+from app.models import Company
 
-@router.get("/companies")
-def get_all_companies():
-    companies = collection_companies.find()
-    return [Company(**company) for company in companies]
+router = APIRouter(
+    prefix="/companies",
+    tags=["companies"],
+    responses={404: {"description": "Not found"}},
+)
 
-@router.get("/companies/{ticker}")
-def get_company_by_ticker(ticker: str):
-    company = collection_companies.find_one({"ticker": ticker})
-    return Company(**company) if company else None
+
+@router.post("/", status_code=201)
+def create_company_handler(company: Company):
+    company_id = create_company(company)
+    return {"message": "Company created successfully", "company_id": company_id}
+
+
+@router.get("/", response_model=list[Company])
+def get_all_companies_handler():
+    return get_all_companies()
+
+
+@router.get("/{ticker}", response_model=Company)
+def get_company_by_ticker_handler(ticker: str):
+    if company := get_company_by_ticker(ticker):
+        return company
+    else:
+        raise HTTPException(status_code=404, detail="Company not found")

@@ -1,0 +1,45 @@
+name: Feature Request
+description: Propose a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new feature or enhancement!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-feature
+    attributes:
+      label: What feature or enhancement do you suggest?
+      description: Please describe the feature or enhancement you'd like to see
+      placeholder: Tell us about the new feature!
+      value: "I'd like to suggest a new feature!"
+    validations:
+      required: true
+  - type: textarea
+    id: why-feature
+    attributes:
+      label: Why is this feature important to you and/or our community?
+      description: Please describe why this feature is important and how it can benefit the community
+      placeholder: Tell us why we should consider this feature!
+      value: "This feature is important because..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: agree
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to the Code of Conduct
+          required: true

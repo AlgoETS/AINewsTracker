@@ -1,0 +1,84 @@
+name: Python application CI
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+  BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+  BINANCE_API_SECRET_KEY: ${{ secrets.BINANCE_API_SECRET_KEY }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.12"
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run linting
+        run: poetry run black --check .
+
+  typecheck:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run type checks
+        run: poetry run mypy .
+
+  security:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run security checks
+        run: poetry run bandit -r app
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: |
+          poetry run coverage run -m pytest
+          poetry run coverage report -m
+
+  docs:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build docs
+      run: poetry run sphinx-build -b html docs/source docs/build
+
+  app:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run app (briefly)
+        run: |
+          uvicorn app.main:app --reload --port 8000 &
+          sleep 5 &&
+          kill $!
