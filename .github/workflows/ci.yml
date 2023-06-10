@@ -12,14 +12,6 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Cache Python interpreter
-        uses: actions/cache@v3
-        with:
-          path: ~/.pyenv
-          key: ${{ runner.os }}-pyenv-${{ env.python-version }}
-          restore-keys: |
-            ${{ runner.os }}-pyenv-
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -31,7 +23,7 @@ jobs:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Run image
+      - name: Run poetry
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: "1.5.0"
