@@ -39,6 +39,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -50,6 +52,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -64,6 +68,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -75,6 +81,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -86,6 +94,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -99,6 +109,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
@@ -110,6 +122,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
