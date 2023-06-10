@@ -39,6 +39,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run tests
         run: poetry run pytest
 
@@ -46,6 +50,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run linters
         run: |
           poetry run black --check .
@@ -56,6 +64,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run security checks
         run: poetry run bandit -r .
 
@@ -63,6 +75,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run type checks
         run: poetry run mypy .
 
@@ -70,6 +86,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run coverage
         run: |
           poetry run coverage run -m pytest
@@ -79,6 +99,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Build docs
         run: poetry run sphinx-build -b html docs/source docs/build
 
@@ -86,6 +110,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
       - name: Run app (briefly)
         run: |
           uvicorn app.main:app --reload --port 8000 & 
