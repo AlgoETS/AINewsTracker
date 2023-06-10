@@ -19,8 +19,7 @@ class MongoDB:
             # Connect to MongoDB
             cls._instance._client = MongoClient(settings.MONGODB_URL)
             cls._instance._db = cls._instance._client["AINewsTracker"]
-            cls._instance.create_collections(
-                ["companies", "articles", "news_feed"])
+            cls._instance.create_collections(["companies", "articles", "news_feed"])
         return cls._instance
 
     def create_collections(self, collection_names):
@@ -42,6 +41,9 @@ class MongoDB:
 
     def get_client(self):
         return self._client
+
+    def close(self):
+        self._client.close()
 
 
 class RedisDB:

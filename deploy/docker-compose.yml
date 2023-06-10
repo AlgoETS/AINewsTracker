@@ -13,7 +13,7 @@ services:
     command: uvicorn app.main:app --host
     networks:
       dashboard:
-        ipv4_address: 172.168.0.6
+        ipv4_address: 172.16.0.1
 
   redis:
     image: redis:alpine
@@ -25,7 +25,7 @@ services:
       - 6379:6379
     networks:
       dashboard:
-        ipv4_address: 172.16.238.7
+        ipv4_address: 172.16.0.2
 
   mongo:
     image: mongo:latest
@@ -38,7 +38,7 @@ services:
       - 27017:27017
     networks:
       dashboard:
-        ipv4_address: 172.16.238.8
+        ipv4_address: 172.16.0.3
 
   prometheus:
     image: prom/prometheus:latest
@@ -52,7 +52,7 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     networks:
       dashboard:
-        ipv4_address: 172.16.238.9
+        ipv4_address: 172.16.0.4
 
   grafana:
     image: grafana/grafana:latest
@@ -68,7 +68,7 @@ services:
       - ./config.monitoring
     networks:
       dashboard:
-        ipv4_address: 172.16.238.10
+        ipv4_address: 172.16.0.5
 
 networks:
   dashboard:
@@ -77,4 +77,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.238.0/24
+        - subnet: 172.16.0.0/24
