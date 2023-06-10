@@ -24,7 +24,11 @@ AINewsTracker is a powerful web application dedicated to backtesting the influen
 2. Run the following command to install the required dependencies:
 
 ```shell
+pip install poetry
+poetry install
 pip install -r requirements.txt
+
+
 ```
 
 3. Run the following command to launch FastAPI in development mode:
