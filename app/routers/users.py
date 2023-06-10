@@ -1,38 +1,33 @@
-from fastapi import APIRouter, HTTPException
-from typing import List
-from ..models.users import UserDTO, create_user, get_user, get_all_users, update_user, delete_user
+from fastapi import APIRouter
+from .models import UserDTO
+from .database import collection_users
 
-# init router
-router = APIRouter(
-    prefix="/users",
-    tags=["users"],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
-# User routes
-@router.post("/", status_code=201)
-def create_user_handler(user: UserDTO):
-    user_id = create_user(user)
-    return {"message": "User created successfully", "user_id": user_id}
+@router.post("/users")
+def create_user(user: UserDTO):
+    user_dict = user.dict()
+    user_dict["_id"] = str(ObjectId())
+    result = collection_users.insert_one(user_dict)
+    return result.inserted_id
 
-@router.get("/{user_id}", response_model=UserDTO)
-def get_user_handler(user_id: str):
-    user = get_user(user_id)
-    if user:
-        return user
-    else:
-        raise HTTPException(status_code=404, detail="User not found")
+@router.get("/users")
+def get_all_users():
+    users = collection_users.find()
+    return [UserDTO(**user) for user in users]
 
-@router.get("/", response_model=List[UserDTO])
-def get_all_users_handler():
-    return get_all_users()
+@router.get("/users/{user_id}")
+def get_user(user_id: str):
+    user = collection_users.find_one({"_id": user_id})
+    return UserDTO(**user)
 
-@router.put("/{user_id}")
-def update_user_handler(user_id: str, updated_user: UserDTO):
-    update_user(user_id, updated_user)
+@router.put("/users/{user_id}")
+def update_user(user_id: str, updated_user: UserDTO):
+    updated_user_dict = updated_user.dict()
+    collection_users.update_one({"_id": user_id}, {"$set": updated_user_dict})
     return {"message": "User updated successfully"}
 
-@router.delete("/{user_id}")
-def delete_user_handler(user_id: str):
-    delete_user(user_id)
+@router.delete("/users/{user_id}")
+def delete_user(user_id: str):
+    collection_users.delete_one({"_id": user_id})
     return {"message": "User deleted successfully"}
