@@ -2,7 +2,7 @@
 name = "AINewsTracker"
 version = "0.1.0"
 description = "A web application for backtesting the influence of financial news on the stock market using AI."
-authors = ["Antoine Boucher <antoine.boucher012@gmail.com>"]
+authors = ["Antoine Boucher <antoine.boucher012@gmail.com>", "Mohamed Ilias <Mohamed.ilias.1@ens.etsmtl.ca>", "Makhlouf Hennine <makhlouf.hennine.1@ens.etsmtl.ca>"]
 readme = "README.md"
 license = "MIT"
 
@@ -51,7 +51,8 @@ mkdocs-material = "^9.1.5"
 mkdocstrings = "^0.22.0"
 
 [tool.poetry.scripts]
-start = "app.main:start"
+start = "uvicorn app.main:app --reload"
+ls = "ls -l"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
