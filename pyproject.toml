@@ -7,7 +7,7 @@ readme = "README.md"
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10.0, !=3.11.*"
 fastapi = "^0.81.0"
 pydantic = "^1.10.8"
 python-multipart = "^0.0.6"
@@ -27,7 +27,7 @@ financedatabase = "^2.0.8"
 matplotlib = "^3.5.1"
 mpl-finance = "^0.10.1"
 nltk = "^3.8.1"
-openbb = {version = ">=2.5.1", extras = ["all", "forecast", "optimization"]}
+openbb = { version = ">=2.5.1", python = ">=3.10,<3.11.dev0 || >=3.12.dev0,<4.0", extras = ["all", "forecast", "optimization"]}
 openpyxl = "^3.1.1"
 pandas = "^1.5.3"
 pandas-ta = "^0.3.14b"
