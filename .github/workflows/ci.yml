@@ -2,6 +2,7 @@ name: Python application CI
 
 on:
   pull_request:
+    branches: [main]
 
 env:
   FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
