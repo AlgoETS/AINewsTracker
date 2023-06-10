@@ -25,11 +25,14 @@ jobs:
         with:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.1.15"
 
       - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | python -
-          echo "$HOME/.local/bin:$PATH" >> $GITHUB_ENV
           poetry install
 
   test:
