@@ -20,9 +20,6 @@ COPY . .
 
 # Install dependencies
 RUN poetry install
-RUN pip install -r requirements.txt
-RUN pip install -r requirements-dev.txt
-
 
 # Run app
 CMD uvicorn app.app:app --port $PORT --host=$HOST
