@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import aiofiles
 import uvicorn
@@ -11,7 +11,6 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
-from fastapi_health import health
 from prometheus_fastapi_instrumentator import Instrumentator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -99,14 +98,24 @@ async def shutdown_event():
     redis_instance.close()
     MongoDB().close()
 
+
 def get_service_health(check_function, get_info_function, service_name_function):
     try:
         is_healthy = check_function()
-        service_info = get_info_function() or {"version": "unknown", "uptime": "unknown"}
+        service_info = get_info_function() or {
+            "version": "unknown",
+            "uptime": "unknown",
+        }
         uptime = service_info.get("uptime", "unknown")
         service_name = service_name_function() or service_name_function or "Unknown"
-        if "uptime" in service_info and service_info["uptime"] is not None and service_info["uptime"] != "unknown":
-            service_info["uptime"] = (datetime.now() - datetime.fromtimestamp(service_info["uptime"])).total_seconds()
+        if (
+            "uptime" in service_info
+            and service_info["uptime"] is not None
+            and service_info["uptime"] != "unknown"
+        ):
+            service_info["uptime"] = (
+                datetime.now() - datetime.fromtimestamp(service_info["uptime"])
+            ).total_seconds()
         else:
             service_info["uptime"] = "unknown"
     except Exception as e:
@@ -125,20 +134,24 @@ def get_service_health(check_function, get_info_function, service_name_function)
         "environment": settings.ENVIRONMENT,
     }
 
+
 @app.get("/health", tags=["Health"])
 async def read_health():
     try:
         prometheus_health = get_service_health(
             check_prometheus_health,
-            lambda: {"version": "2.26.0", "uptime": (datetime.now() - startup_time).total_seconds()},
-            "localhost"
+            lambda: {
+                "version": "2.26.0",
+                "uptime": (datetime.now() - startup_time).total_seconds(),
+            },
+            "localhost",
         )
         print(prometheus_health)
 
         redis_health = get_service_health(
             redis_instance.check_connection,
             redis_instance.get_info,
-            redis_instance.get_hostname()
+            redis_instance.get_hostname(),
         )
         print(redis_health)
 
@@ -149,7 +162,7 @@ async def read_health():
         mongodb_health = get_service_health(
             mongodb_instance.check_connection,
             mongodb_instance.get_info,
-            mongodb_instance.get_client().address[0]
+            mongodb_instance.get_client().address[0],
         )
         print(mongodb_health)
 
@@ -170,13 +183,14 @@ async def read_health():
         logger.error(f"Health check failed due to {str(e)}")
         raise HTTPException(status_code=503, detail=str(e)) from e
 
+
 @app.get("/favicon.ico", tags=["Static"])
 async def favicon():
-    file_path = os.path.join(os.path.dirname(
-        __file__), "static", "favicon.ico")
+    file_path = os.path.join(os.path.dirname(__file__), "static", "favicon.ico")
     async with aiofiles.open(file_path, mode="rb") as f:
         content = await f.read()
     return Response(content, media_type="image/x-icon")
+
 
 @limiter.limit("5/minute")
 @app.get("/", tags=["Root"])

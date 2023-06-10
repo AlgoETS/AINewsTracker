@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 from datetime import date, datetime
 from typing import Optional
+
 from pydantic import BaseModel
 
 
 class UserDTO(BaseModel):
-    name : str
+    name: str
+
+
 class User(BaseModel):
     id: Optional[str]
     nom_famille: str

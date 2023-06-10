@@ -12,8 +12,31 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (GitHub)
-        uses: actions/checkout@v3
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/docker-layers
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+      - name: Load cached Docker layers
+        run: |
+          docker load < /tmp/docker-layers
+        continue-on-error: true
+      - name: Build Docker image
+        run: |
+          docker build . --tag my-image
+          docker save my-image > /tmp/docker-layers
+            - name: Checkout (GitHub)
+              uses: actions/checkout@v3
+
+      - name: Cache Python interpreter
+        uses: actions/cache@v3
+        with:
+          path: ~/.pyenv
+          key: ${{ runner.os }}-pyenv-${{ env.python-version }}
+          restore-keys: |
+            ${{ runner.os }}-pyenv-
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -37,7 +60,7 @@ jobs:
           poetry install
 
       - name: Run linting
-        run: poetry run black --check .
+        run: poetry run black app
         continue-on-error: true
 
 

@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 import logging
+
 import structlog
+
 
 class Logger:
     _instance = None
@@ -23,7 +26,7 @@ class Logger:
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
             structlog.processors.UnicodeDecoder(),
-            structlog.processors.JSONRenderer()
+            structlog.processors.JSONRenderer(),
         ]
 
         structlog.configure(

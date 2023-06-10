@@ -1,10 +1,10 @@
-import os
+# -*- coding: utf-8 -*-
 import unittest
-from unittest.mock import patch
+
 from app.config import Settings
 
-class TestSettings(unittest.TestCase):
 
+class TestSettings(unittest.TestCase):
     def setUp(self):
         Settings.reset()
 

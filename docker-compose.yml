@@ -9,6 +9,11 @@ services:
       - REDIS_PASSWORD=redis
     ports:
       - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -18,6 +23,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mongo
     ports:
       - 27017:27017
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   web:
     build: .
     environment:
@@ -27,3 +37,8 @@ services:
     ports:
       - 8000:8000
     command: uvicorn app.main:app --host
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
