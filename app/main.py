@@ -146,25 +146,20 @@ async def read_health():
             },
             "localhost",
         )
-        print(prometheus_health)
 
         redis_health = get_service_health(
             redis_instance.check_connection,
             redis_instance.get_info,
             redis_instance.get_hostname(),
         )
-        print(redis_health)
 
         mongodb_instance = MongoDB()
-        print("MongoDB get_info:", mongodb_instance.get_info())
-        print("MongoDB get_hostname:", mongodb_instance.get_client().address[0])
 
         mongodb_health = get_service_health(
             mongodb_instance.check_connection,
             mongodb_instance.get_info,
             mongodb_instance.get_client().address[0],
         )
-        print(mongodb_health)
 
         return {
             "status": "ok",
@@ -179,7 +174,6 @@ async def read_health():
             },
         }
     except Exception as e:
-        print(e)
         logger.error(f"Health check failed due to {str(e)}")
         raise HTTPException(status_code=503, detail=str(e)) from e
 
@@ -199,18 +193,5 @@ def read_root():
     logger.info("AI News Tracker API")
     return "AI News Tracker API"
 
-
-def start(host: str = "0.0.0.0", port: int = 8000, reload: bool = True):
-    """Launched with `poetry run start` at root level"""
-    uvicorn.run(
-        "app.main:app",
-        host=settings.HOST,
-        port=settings.PORT,
-        reload=settings.RELOAD,
-        workers=4,
-    )
-
-
 if __name__ == "__main__":
     Instrumentator().instrument(app).expose(app)
-    start()
