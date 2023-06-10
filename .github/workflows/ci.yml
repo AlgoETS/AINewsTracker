@@ -29,6 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           curl -sSL https://install.python-poetry.org | python -
+          echo "$HOME/.local/bin:$PATH" >> $GITHUB_ENV
           poetry install
 
   test:
