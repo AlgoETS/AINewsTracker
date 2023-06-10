@@ -13,6 +13,8 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from fastapi_health import health
 from prometheus_fastapi_instrumentator import Instrumentator
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
 
 from app.core.telemetry.prometheus import check_prometheus_health
 
@@ -42,6 +44,8 @@ swagger_ui_parameters = {
     "syntaxHighlight.theme": "obsidian",
 }
 
+limiter = Limiter(key_func=get_remote_address)
+
 # Init app
 app = FastAPI(
     title="AI News Tracker API",
@@ -52,6 +56,10 @@ app = FastAPI(
     swagger_ui_parameters=swagger_ui_parameters,
     redoc_url=None,
 )
+
+#  Rate Limiting
+app.state.limiter = limiter
+app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
 
 # add all routers to app
 app.include_router(users.router)
@@ -116,7 +124,7 @@ def get_service_health(check_function, get_info_function, service_name_function)
         "environment": settings.ENVIRONMENT,
     }
 
-
+@limiter.limit("1/minute")
 @app.get("/health", tags=["Health"])
 async def read_health():
     try:
@@ -162,7 +170,7 @@ async def read_health():
         logger.error(f"Health check failed due to {str(e)}")
         raise HTTPException(status_code=503, detail=str(e)) from e
 
-
+@limiter.limit("5/minute")
 @app.get("/favicon.ico", tags=["Static"])
 async def favicon():
     file_path = os.path.join(os.path.dirname(
@@ -171,7 +179,7 @@ async def favicon():
         content = await f.read()
     return Response(content, media_type="image/x-icon")
 
-
+@limiter.limit("2/minute")
 @app.get("/", tags=["Root"])
 @cache(expire=60)
 def read_root():

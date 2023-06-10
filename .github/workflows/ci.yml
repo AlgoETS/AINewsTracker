@@ -35,12 +35,42 @@ jobs:
         run: |
           poetry install
 
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run linting
+        run: poetry run black --check .
+
+  typecheck:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run type checks
+        run: poetry run mypy .
+
+  security:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run security checks
+        run: poetry run bandit -r app
+
   test:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
-        run: poetry run pytest
+        run: |
+          poetry run coverage run -m pytest
+          poetry run coverage report -m
+
+  docs:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build docs
+      run: poetry run sphinx-build -b html docs/source docs/build
 
   app:
     needs: setup
