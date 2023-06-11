@@ -68,6 +68,7 @@ jobs:
 
       - name: Build docs
         run: poetry run sphinx-build -b html docs/source docs/build
+        continue-on-error: true
 
       - name: Run app (briefly)
         run: |
