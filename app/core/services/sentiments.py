@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-import torch
+from app.core.logging import logger
+
+try:
+    import torch
+except ImportError:
+    torch = None
+    logger.warning("Unable to import torch. Some functionality may be unavailable.")
+
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 

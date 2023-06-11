@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-import logging
-
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from app.core.logging import logger
 
 try:
     import torch
 except ImportError:
-    logging.warning("Unable to import torch. Some functionality may be unavailable.")
+    torch = None
+    logger.warning("Unable to import torch. Some functionality may be unavailable.")
+
+
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 try:
     tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
     model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
 except Exception:
-    logging.warning(
+    logger.warning(
         "Unable to load finbert model. Some functionality may be unavailable."
     )
 
