@@ -8,7 +8,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from app.models.users import UserDTO
+# Use email instead of name
+class UserDTO(BaseModel):
+    email: str
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -18,24 +20,21 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
+# Use email instead of username
 class TokenData(BaseModel):
-    username: Optional[str] = None
-
+    email: Optional[str] = None
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
-
-def authenticate_user(courriel: str, password: str):
-    if user := get_user(courriel):
+# Use email as identifier
+def authenticate_user(email: str, password: str):
+    if user := get_user(email):
         return user if verify_password(password, user.password) else False
     else:
         return False
-
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -45,18 +44,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
     except JWTError as e:
         raise credentials_exception from e
-    user = get_user(token_data.username)
+    user = get_user(token_data.email)
     if user is None:
         raise credentials_exception
     return user
 
-
-def get_user(user_id: str) -> UserDTO:
-    user = collection_users.find_one({"_id": user_id})
+# Use email as identifier
+def get_user(email: str) -> UserDTO:
+    user = collection_users.find_one({"email": email})
     return UserDTO(**user)

@@ -5,7 +5,7 @@ from app.config import Settings
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else ".env"
+env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../../.env"
 
 settings = Settings(env_file)
 

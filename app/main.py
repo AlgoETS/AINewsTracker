@@ -23,12 +23,12 @@ from .core.database import MongoDB, RedisDB
 from .core.logging import Logger
 
 # import all routers
-from .routers import company, users
+from .routers import company, users , rss, article
 
 startup_time = datetime.now()
 
 # Depending on the environment variable ENV_FILE, the respective .env file is loaded. If ENV_FILE is not set, the default .env file is loaded.
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else ".env"
+env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../.env"
 
 settings = Settings(env_file)
 
@@ -63,6 +63,8 @@ app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
 # add all routers to app
 app.include_router(users.router)
 app.include_router(company.router)
+app.include_router(rss.router)
+app.include_router(article.router)
 
 # CORS
 app.add_middleware(
