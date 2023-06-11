@@ -1,31 +1,35 @@
 # -*- coding: utf-8 -*-
-# rss_feed_routes.py
-from core import create_rss_feed, delete_rss_feed, get_rss_feed_by_id, update_rss_feed
+# news_feed_routes.py
+from app.core.repo.newsFeed import create_newsFeed, get_newsFeed_by_id, update_newsFeed_by_id, delete_newsFeed_by_id
 from fastapi import APIRouter
 
-from app.models import newsFeed
+from app.models import NewsFeed
 
-router = APIRouter()
-
-
-@router.post("/", response_model=newsFeed)
-async def create_feed(rss_feed: newsFeed):
-    feed_id = create_rss_feed(rss_feed)
-    return {**rss_feed.dict(), "_id": feed_id}
+router = APIRouter(
+    prefix="/newsFeed",
+    tags=["NewsFeed"],
+    responses={404: {"description": "Not found"}},
+)
 
 
-@router.get("/{rss_feed_id}", response_model=newsFeed)
-async def read_feed(rss_feed_id: str):
-    return get_rss_feed_by_id(rss_feed_id)
+@router.post("/", response_model=NewsFeed)
+async def create_feed(newsFeed: NewsFeed):
+    feed_id = create_newsFeed(newsFeed)
+    return {**newsFeed.dict(), "_id": feed_id}
 
 
-@router.put("/{rss_feed_id}", response_model=newsFeed)
-async def update_feed(rss_feed_id: str, rss_feed: newsFeed):
-    update_rss_feed(rss_feed_id, rss_feed)
-    return {**rss_feed.dict(), "_id": rss_feed_id}
+@router.get("/{newsFeed_id}", response_model=NewsFeed)
+async def read_feed(newsFeed_id: str):
+    return get_newsFeed_by_id(newsFeed_id)
 
 
-@router.delete("/{rss_feed_id}")
-async def delete_feed(rss_feed_id: str):
-    delete_rss_feed(rss_feed_id)
-    return {"message": f"RSS Feed {rss_feed_id} has been deleted."}
+@router.put("/{newsFeed_id}", response_model=NewsFeed)
+async def update_feed(newsFeed_id: str, newsFeed: NewsFeed):
+    update_newsFeed_by_id(newsFeed_id, newsFeed)
+    return {**newsFeed.dict(), "_id": newsFeed_id}
+
+
+@router.delete("/{newsFeed_id}")
+async def delete_feed(newsFeed_id: str):
+    delete_newsFeed_by_id(newsFeed_id)
+    return {"message": f"News Feed {newsFeed_id} has been deleted."}

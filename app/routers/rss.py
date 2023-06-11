@@ -6,7 +6,7 @@ from ..core.services.rss.rss import RSSFeed
 
 router = APIRouter(
     prefix="/rss",
-    tags=["rss"],
+    tags=["RSS"],
     responses={404: {"description": "Not found"}},
 )
 rss_feed = RSSFeed()
@@ -27,7 +27,7 @@ sources = {
     "Reuters": Reuters(),
 }
 @router.post("/rss/feed")
-def fetch_rss_feed(source: str , limit: int):
+async def fetch_rss_feed(source: str , limit: int):
     # get source from name
     source = sources[source]
-    return rss_feed.fetch_feed_entries(source, limit)
+    return await rss_feed.fetch_feed_entries(source, limit)

@@ -23,7 +23,7 @@ from .core.database import MongoDB, RedisDB
 from .core.logging import Logger
 
 # import all routers
-from .routers import company, users , rss, article
+from .routers import company, users, rss, article, newsFeed
 
 startup_time = datetime.now()
 
@@ -69,6 +69,7 @@ app.include_router(users.router)
 app.include_router(company.router)
 app.include_router(rss.router)
 app.include_router(article.router)
+app.include_router(newsFeed.router)
 
 # CORS
 app.add_middleware(

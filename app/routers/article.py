@@ -14,7 +14,7 @@ from app.models import Article
 
 router = APIRouter(
     prefix="/articles",
-    tags=["articles"],
+    tags=["Articles"],
     responses={404: {"description": "Not found"}},
 )
 

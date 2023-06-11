@@ -1,29 +1,43 @@
 # -*- coding: utf-8 -*-
-# database_operations.py
-from bson import ObjectId
-from database import collection_rss_feeds
+from typing import Optional
 
-from app.models import newsFeed
+from bson.objectid import ObjectId
+from motor.motor_asyncio import AsyncIOMotorClient
 
+from app.core.database import MongoDB
+from app.models.newsFeed import NewsFeed
 
-def create_rss_feed(rss_feed: newsFeed):
-    rss_feed_dict = rss_feed.dict()
-    rss_feed_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string
-    result = collection_rss_feeds.insert_one(rss_feed_dict)
+client = AsyncIOMotorClient()
+db = client.AINewsTracker
+collection = db.newsFeeds
+
+async def create_newsFeed(newsFeed_item: NewsFeed):
+    newsFeed_dict = newsFeed_item.dict()
+    newsFeed_dict["_id"] = str(ObjectId())
+    result = await collection.insert_one(newsFeed_dict)
     return result.inserted_id
 
+async def create_newsFeeds(newsFeeds: list[NewsFeed]):
+    newsFeed_dicts = [newsFeed_item.dict() for newsFeed_item in newsFeeds]
+    for newsFeed_dict in newsFeed_dicts:
+        newsFeed_dict["_id"] = str(ObjectId())
+    result = await collection.insert_many(newsFeed_dicts)
+    return result.inserted_ids
 
-def get_rss_feed_by_id(rss_feed_id: str) -> newsFeed:
-    rss_feed = collection_rss_feeds.find_one({"_id": rss_feed_id})
-    return newsFeed(**rss_feed)
+async def get_all_newsFeeds() -> list[NewsFeed]:
+    cursor = collection.find()
+    newsFeeds = await cursor.to_list(length=100)  # specify max limit here
+    return [NewsFeed(**newsFeed_item) for newsFeed_item in newsFeeds]
 
+async def get_newsFeed_by_id(newsFeed_id: str) -> Optional[NewsFeed]:
+    newsFeed_item = await collection.find_one({"_id": newsFeed_id})
+    return NewsFeed(**newsFeed_item) if newsFeed_item else None
 
-def update_rss_feed(rss_feed_id: str, updated_rss_feed: newsFeed):
-    updated_rss_feed_dict = updated_rss_feed.dict()
-    collection_rss_feeds.update_one(
-        {"_id": rss_feed_id}, {"$set": updated_rss_feed_dict}
-    )
+async def delete_newsFeed_by_id(newsFeed_id: str):
+    result = await collection.delete_one({"_id": newsFeed_id})
+    return result.deleted_count
 
+async def update_newsFeed_by_id(newsFeed_id: str, newsFeed_item: NewsFeed):
+    result = await collection.replace_one({"_id": newsFeed_id}, newsFeed_item.dict())
+    return result.modified_count
 
-def delete_rss_feed(rss_feed_id: str):
-    collection_rss_feeds.delete_one({"_id": rss_feed_id})

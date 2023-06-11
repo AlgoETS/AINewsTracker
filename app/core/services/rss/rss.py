@@ -1,5 +1,5 @@
 from datetime import datetime
-import requests
+import httpx
 from bs4 import BeautifulSoup
 import feedparser
 import time
@@ -12,19 +12,21 @@ from app.core.repo.article import create_articles
 
 class RSSFeed:
     def __init__(self):
-        pass
+        self.client = httpx.AsyncClient()  # initialize the AsyncClient
+        self.unwanted_tags = ['nav', 'footer', 'header', 'aside', 'script', 'style', 'form', 'input', 'button', 'img',
+                              'iframe', 'video', 'audio', 'svg', 'select', 'label', 'textarea', 'object', 'embed', 'noscript', 'meta']
 
-    def fetch_feed_entries(self, source, limit):
-        response = requests.get(source.url)
+    async def fetch_feed_entries(self, source, limit):
+        response = await self.client.get(source.url)
         feed = response.text
         parsed_feed = feedparser.parse(feed)
         entries = parsed_feed.entries[:limit]
         articles = []
         for entry in entries:
             print(entry)
-            text_content=self.get_entry_text(entry['link'])
+            text_content = await self.get_entry_text(entry['link'])
             try:
-                sentiment=analyze_sentiment(text_content)
+                sentiment = analyze_sentiment(text_content)
             except Exception:
                 sentiment = {'Neutral': 0.5}
             most_sentiment = max(sentiment, key=sentiment.get)
@@ -34,23 +36,21 @@ class RSSFeed:
                 title=entry.get('title'),
                 content=text_content,
                 url=entry.get('link'),
-                date= datetime.fromtimestamp(time.mktime(entry.get('published_parsed'))),
-                sentiment = most_sentiment,
-                sentiment_score= most_sentiment_score,
+                date=datetime.fromtimestamp(
+                    time.mktime(entry.get('published_parsed'))),
+                sentiment=most_sentiment,
+                sentiment_score=most_sentiment_score,
             )
             articles.append(article)
-        create_articles(articles)
+        await create_articles(articles)
         return articles
 
-    def get_entry_text(self, link):
-        response = requests.get(link)
+    async def get_entry_text(self, link):
+        response = await self.client.get(link)
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
 
-        # Find and remove unwanted elements
-        unwanted_tags = ['nav', 'footer', 'header', 'aside', 'script', 'style', 'form', 'input', 'button', 'img', 'iframe', 'video', 'audio', 'svg', 'select', 'label', 'textarea', 'object', 'embed', 'noscript', 'meta']
-
-        for tag in unwanted_tags:
+        for tag in self.unwanted_tags:
             for elem in soup.find_all(tag):
                 elem.decompose()
 
