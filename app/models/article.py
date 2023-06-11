@@ -17,6 +17,8 @@ class Article(BaseModel):
     source: Optional[str]
     sentiment_score: float
     sentiment: str
+    summary: str
+    topic: Optional[list[str]] = []
     tickers: Optional[list[str]] = []
     company_id: Optional[str] = None
 

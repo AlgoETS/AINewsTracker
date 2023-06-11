@@ -9,7 +9,6 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.10.0, !=3.11.*"
 fastapi = "^0.81.0"
-pydantic = "^1.10.8"
 python-multipart = "^0.0.6"
 httpx = "^0.23.3"
 pymongo = "^4.3.3"
@@ -34,6 +33,7 @@ aiofiles = "^23.1.0"
 types-aiofiles = "^23.1.0.4"
 slowapi = "^0.1.8"
 asyncio = "^3.4.3"
+en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.1.0/en_core_web_sm-3.1.0.tar.gz"}
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"

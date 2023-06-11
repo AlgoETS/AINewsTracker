@@ -1,5 +1,4 @@
 from datetime import datetime
-from pprint import pprint
 import uuid
 import requests
 from bs4 import BeautifulSoup
@@ -7,9 +6,9 @@ import feedparser
 import time
 
 from ..sentiments import analyze_sentiment 
-from ..summarizer import summarizer
+from ..summarizer import summarize_text
 from ...repo.article import Article
-
+from ..topic_classification import classify_topic
 
 class FeedFetcher:
     def __init__(self):
@@ -22,7 +21,6 @@ class FeedFetcher:
         entries = parsed_feed.entries[:limit]
         articles = []
         for entry in entries:
-            pprint(entry)
             text_content=self.get_entry_text(entry['link'])
             sentiment=analyze_sentiment(text_content)
             most_sentiment = max(sentiment, key=sentiment.get)
@@ -35,7 +33,8 @@ class FeedFetcher:
                 date= datetime.fromtimestamp(time.mktime(entry.get('published_parsed'))),
                 sentiment = most_sentiment,
                 sentiment_score= most_sentiment_score,
-                summary=summarizer(text_content)
+                summary=summarize_text(text_content),
+                topic=classify_topic(text_content),
             )
             articles.append(article)
         return articles
