@@ -43,6 +43,7 @@ torch = "^2.0.1"
 motor = "^3.1.2"
 requests = "^2.31.0"
 beautifulsoup4 = "^4.12.2"
+feedparser = "^6.0.10"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 
-from ..core.services.rss.rss import RSSFeed
-from ..core.services.rss.source import (
+from app.core.services.rss.rss import RSSFeed
+from app.core.services.rss.source import (
     CNBC,
     FT,
     WSJ,
