@@ -70,7 +70,7 @@ class Fortune(Source):
 class MarketWatch(Source):
     def __init__(self, topics=[]):
         super().__init__('MarketWatch')
-
+        self.url = 'http://feeds.marketwatch.com/marketwatch/StockstoWatch/'
         self.add_topics(list(set(topics)))
 
 

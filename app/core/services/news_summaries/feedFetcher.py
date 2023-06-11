@@ -1,15 +1,17 @@
 from datetime import datetime
+from pprint import pprint
+import uuid
 import requests
 from bs4 import BeautifulSoup
 import feedparser
 import time
 
-from ...services.finbert import analyze_sentiment 
-
+from ..sentiments import analyze_sentiment 
+from ..summarizer import summarizer
 from ...repo.article import Article
 
 
-class RSSFeed:
+class FeedFetcher:
     def __init__(self):
         pass
 
@@ -20,19 +22,20 @@ class RSSFeed:
         entries = parsed_feed.entries[:limit]
         articles = []
         for entry in entries:
-            print(entry)
+            pprint(entry)
             text_content=self.get_entry_text(entry['link'])
             sentiment=analyze_sentiment(text_content)
             most_sentiment = max(sentiment, key=sentiment.get)
             most_sentiment_score = sentiment[most_sentiment]
             article = Article(
-                id=entry.get('id'),
+                id=str(uuid.uuid4()),
                 title=entry.get('title'),
                 content=text_content,
                 url=entry.get('link'),
                 date= datetime.fromtimestamp(time.mktime(entry.get('published_parsed'))),
                 sentiment = most_sentiment,
                 sentiment_score= most_sentiment_score,
+                summary=summarizer(text_content)
             )
             articles.append(article)
         return articles
