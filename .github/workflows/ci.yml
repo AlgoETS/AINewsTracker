@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install genbadge
+          pip install genbadge defusedxml
           poetry install
 
       - name: Run linting
