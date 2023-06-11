@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 from typing import Optional
+from app.models.users import UserDTO
 
-from database import collection_users
+from app.core.database import MongoDB
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-
-# Use email instead of name
-class UserDTO(BaseModel):
-    email: str
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -57,5 +54,5 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 # Use email as identifier
 def get_user(email: str) -> UserDTO:
-    user = collection_users.find_one({"email": email})
+    user = MongoDB().get_collection("users").find_one({"email": email})
     return UserDTO(**user)

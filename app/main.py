@@ -41,6 +41,10 @@ swagger_ui_parameters = {
     "showExtensions": True,
     "showCommonExtensions": True,
     "syntaxHighlight.theme": "obsidian",
+    "operationsSorter": "alpha",
+    "configUrl": "/api/v1/openapi.json",
+    "validatorUrl": None,
+    "oauth2RedirectUrl": "http://localhost:8000/api/v1/docs/oauth2-redirect",
 }
 
 limiter = Limiter(key_func=get_remote_address)

@@ -11,7 +11,6 @@ router = APIRouter(
 )
 rss_feed = RSSFeed()
 
-
 sources = {
     "CNBC": CNBC(),
     "Seeking Alpha": SeekingAlpha(),

@@ -13,6 +13,13 @@ def create_article(article: Article):
     result = MongoDB().get_collection("articles").insert_one(article_dict)
     return result.inserted_id
 
+def create_articles(articles: list[Article]):
+    article_dicts = [article.dict() for article in articles]
+    for article_dict in article_dicts:
+        article_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string
+    result = MongoDB().get_collection("articles").insert_many(article_dicts)
+    return result.inserted_ids
+
 def get_all_articles() -> list[Article]:
     articles = MongoDB().get_collection("articles").find()
     return [Article(**article) for article in articles]

@@ -6,6 +6,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from app.core.database import MongoDB
+from app.core.repo.users import get_current_user
 from app.models import UserDTO
 
 # Constants and configurations
@@ -78,3 +79,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.get("email")}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/users/me", tags=["Users"])
+async def read_users_me(current_user: str = Depends(get_current_user)):
+    return {"username": current_user}
+
+@router.get("/token", tags=["Users"])
+async def get_token(current_user: str = Depends(get_current_user)):
+    return {"access_token": current_user}

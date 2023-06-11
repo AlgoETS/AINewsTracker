@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 class UserDTO(BaseModel):
     email: Optional[str] = None
-    password: Optional[str] = None
 
 class User(BaseModel):
     id: Optional[str]

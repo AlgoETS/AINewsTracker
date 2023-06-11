@@ -105,3 +105,6 @@ class RedisDB:
             return "unknown"
         return self._connection.connection_pool.connection_kwargs["host"]
 
+    def close(self):
+        self._connection.close()
+

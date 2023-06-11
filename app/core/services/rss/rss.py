@@ -6,7 +6,8 @@ import time
 
 from app.core.services.finbert import analyze_sentiment
 
-from app.core.repo.article import Article
+from app.models.article import Article
+from app.core.repo.article import create_articles
 
 
 class RSSFeed:
@@ -24,7 +25,7 @@ class RSSFeed:
             text_content=self.get_entry_text(entry['link'])
             try:
                 sentiment=analyze_sentiment(text_content)
-            except:
+            except Exception:
                 sentiment = {'Neutral': 0.5}
             most_sentiment = max(sentiment, key=sentiment.get)
             most_sentiment_score = sentiment[most_sentiment]
@@ -38,6 +39,7 @@ class RSSFeed:
                 sentiment_score= most_sentiment_score,
             )
             articles.append(article)
+        create_articles(articles)
         return articles
 
     def get_entry_text(self, link):
