@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 # news_feed_routes.py
-from app.core.repo.newsFeed import create_newsFeed, get_newsFeed_by_id, update_newsFeed_by_id, delete_newsFeed_by_id
 from fastapi import APIRouter
 
+from app.core.repo.newsFeed import (
+    create_newsFeed,
+    delete_newsFeed_by_id,
+    get_newsFeed_by_id,
+    update_newsFeed_by_id,
+)
 from app.models import NewsFeed
 
 router = APIRouter(

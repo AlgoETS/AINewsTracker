@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 
 import aiofiles
-import uvicorn
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_cache import FastAPICache
@@ -15,15 +14,14 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
+from app.__version__ import __version__
+from app.config import Settings
+from app.core.database import MongoDB, RedisDB
+from app.core.logging import Logger
 from app.core.telemetry.prometheus import check_prometheus_health
 
-from .__version__ import __version__
-from .config import Settings
-from .core.database import MongoDB, RedisDB
-from .core.logging import Logger
-
 # import all routers
-from .routers import company, users, rss, article, newsFeed
+from app.routers import article, company, newsFeed, rss, users
 
 startup_time = datetime.now()
 
@@ -199,6 +197,7 @@ async def favicon():
 def read_root():
     logger.info("AI News Tracker API")
     return "AI News Tracker API"
+
 
 if __name__ == "__main__":
     Instrumentator().instrument(app).expose(app)

@@ -32,4 +32,3 @@ def test_newsfeed_model():
     assert newsfeed.last_fetch == some_datetime
     assert newsfeed.last_update == some_datetime
     assert newsfeed.last_article == some_datetime
-

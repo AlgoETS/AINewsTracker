@@ -1,20 +1,33 @@
+# -*- coding: utf-8 -*-
 import csv
-import httpx
 from typing import List
 
-from app.models.company import Company
-from app.core.database import MongoDB
-from app.core.repo.company import create_company, create_companies
+import httpx
+
 from app.config import settings
+from app.core.repo.company import create_companies
+from app.models.company import Company
+
 
 class CompanySeeder:
     API_KEY = settings.FMP_API_KEY
-    SP500_URL = f'https://financialmodelingprep.com/api/v3/sp500_constituent?apikey={API_KEY}'
+    SP500_URL = (
+        f"https://financialmodelingprep.com/api/v3/sp500_constituent?apikey={API_KEY}"
+    )
 
     @staticmethod
     def generate_csv(companies: List[Company], filename: str):
-        with open(filename, 'w', newline='') as csvfile:
-            fieldnames = ["id", "name", "ticker", "description", "website", "industry", "sector", "country"]
+        with open(filename, "w", newline="") as csvfile:
+            fieldnames = [
+                "id",
+                "name",
+                "ticker",
+                "description",
+                "website",
+                "industry",
+                "sector",
+                "country",
+            ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for company in companies:
@@ -31,13 +44,13 @@ class CompanySeeder:
         companies = []
         for company_data in data:
             company = Company(
-                name=company_data.get('name'),
-                ticker=company_data.get('symbol'),
-                description=company_data.get('description'),
-                website=company_data.get('website'),
-                industry=company_data.get('industry'),
-                sector=company_data.get('sector'),
-                country=company_data.get('country')
+                name=company_data.get("name"),
+                ticker=company_data.get("symbol"),
+                description=company_data.get("description"),
+                website=company_data.get("website"),
+                industry=company_data.get("industry"),
+                sector=company_data.get("sector"),
+                country=company_data.get("country"),
             )
             companies.append(company)
         return companies
@@ -53,6 +66,7 @@ class CompanySeeder:
         data = await cls.get_sp500_data()
         companies = cls.create_companies(data)
         create_companies(companies)
+
 
 # Usage
 seeder = CompanySeeder()

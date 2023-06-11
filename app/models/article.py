@@ -20,6 +20,7 @@ class Article(BaseModel):
     tickers: Optional[list[str]] = []
     company_id: Optional[str] = None
 
+
 class Comment(BaseModel):
     id: Optional[str]
     article_id: str

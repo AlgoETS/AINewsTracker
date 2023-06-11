@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from typing import Optional
-from app.models.users import UserDTO
 
-from app.core.database import MongoDB
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+
+from app.core.database import MongoDB
+from app.models.users import UserDTO
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -17,14 +18,18 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 # Use email instead of username
 class TokenData(BaseModel):
     email: Optional[str] = None
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
+
 
 # Use email as identifier
 def authenticate_user(email: str, password: str):
@@ -32,6 +37,7 @@ def authenticate_user(email: str, password: str):
         return user if verify_password(password, user.password) else False
     else:
         return False
+
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -51,6 +57,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
+
 
 # Use email as identifier
 def get_user(email: str) -> UserDTO:

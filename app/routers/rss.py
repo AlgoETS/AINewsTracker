@@ -1,8 +1,22 @@
+# -*- coding: utf-8 -*-
 from fastapi import APIRouter
-from pydantic import BaseModel
-from bson import ObjectId
-from ..core.services.rss.source import Source, CNBC, SeekingAlpha, Investing, Nasdaq, WSJ, Yahoo, FT, Fortune,MarketWatch,Zacks,Reddit,CNNMoney,Reuters
+
 from ..core.services.rss.rss import RSSFeed
+from ..core.services.rss.source import (
+    CNBC,
+    FT,
+    WSJ,
+    CNNMoney,
+    Fortune,
+    Investing,
+    MarketWatch,
+    Nasdaq,
+    Reddit,
+    Reuters,
+    SeekingAlpha,
+    Yahoo,
+    Zacks,
+)
 
 router = APIRouter(
     prefix="/rss",
@@ -26,8 +40,10 @@ sources = {
     "CNNMoney": CNNMoney(),
     "Reuters": Reuters(),
 }
+
+
 @router.post("/rss/feed")
-async def fetch_rss_feed(source: str , limit: int):
+async def fetch_rss_feed(source: str, limit: int):
     # get source from name
     source = sources[source]
     return await rss_feed.fetch_feed_entries(source, limit)

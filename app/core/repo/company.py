@@ -11,6 +11,7 @@ def create_company(company: Company):
     result = MongoDB().get_collection("companies").insert_one(company_dict)
     return result.inserted_id
 
+
 def create_companies(companies: list[Company]):
     company_dicts = [company.dict() for company in companies]
     for company_dict in company_dicts:

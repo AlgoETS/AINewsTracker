@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import logging
-from fastapi import FastAPI
-from pydantic import BaseModel
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
 try:
     import torch
 except ImportError:
@@ -11,7 +12,10 @@ try:
     tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
     model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
 except Exception:
-    logging.warning("Unable to load finbert model. Some functionality may be unavailable.")
+    logging.warning(
+        "Unable to load finbert model. Some functionality may be unavailable."
+    )
+
 
 def analyze_sentiment(text):
     inputs = tokenizer.encode_plus(
@@ -20,14 +24,14 @@ def analyze_sentiment(text):
         truncation=True,
         max_length=512,
         padding="longest",
-        return_tensors="pt"
+        return_tensors="pt",
     )
     try:
         with torch.no_grad():
             outputs = model(
                 inputs["input_ids"],
                 token_type_ids=inputs["token_type_ids"],
-                attention_mask=inputs["attention_mask"]
+                attention_mask=inputs["attention_mask"],
             )
 
         logits = outputs.logits
@@ -44,7 +48,3 @@ def analyze_sentiment(text):
             "negative": probabilities[0],
             "neutral": probabilities[1],
         }
-
-
-
-

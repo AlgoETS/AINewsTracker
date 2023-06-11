@@ -3,12 +3,10 @@ from fastapi import APIRouter, HTTPException
 
 from app.core.repo.article import (
     create_article,
+    delete_article_by_id,
     get_all_articles,
     get_article_by_id,
-    delete_article_by_id,
-    get_articles_by_company_id,
-    get_score_by_article_id
-
+    get_score_by_article_id,
 )
 from app.models import Article
 
@@ -17,6 +15,7 @@ router = APIRouter(
     tags=["Articles"],
     responses={404: {"description": "Not found"}},
 )
+
 
 @router.post("/articles")
 def create_article_handler(article: Article):
@@ -28,9 +27,9 @@ def create_article_handler(article: Article):
 def get_all_articles_handler():
     return get_all_articles()
 
+
 @router.get("/articles/{article_id}")
 def get_article_handler(article_id: str):
-    
     if article := get_article_by_id(article_id):
         return article
     else:
@@ -43,7 +42,7 @@ def delete_article_handler(article_id: str):
     if deleted_count == 0:
         raise HTTPException(status_code=404, detail="Article not found")
     else:
-        return {"message": "Article deleted successfully","article_id": article_id}
+        return {"message": "Article deleted successfully", "article_id": article_id}
 
 
 @router.get("/articles/{article_id}/score")

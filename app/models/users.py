@@ -4,8 +4,10 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+
 class UserDTO(BaseModel):
     email: Optional[str] = None
+
 
 class User(BaseModel):
     id: Optional[str]
@@ -26,4 +28,3 @@ class User(BaseModel):
     friends: list[int] = []
     last_login: date
     last_logout: datetime
-
