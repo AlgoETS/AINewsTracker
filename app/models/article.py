@@ -11,13 +11,13 @@ class Article(BaseModel):
     content: str
     url: str
     date: datetime
-    author: str
-    likes: int
-    comments: int
-    source: str
+    author: Optional[str]
+    likes: Optional[int]
+    comments: Optional[int]
+    source: Optional[str]
     sentiment_score: float
     sentiment: str
-    tickers: list[str] = []
+    tickers: Optional[list[str]] = []
     company_id: Optional[str] = None
 
 class Comment(BaseModel):
