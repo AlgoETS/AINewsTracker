@@ -11,12 +11,17 @@ class Article(BaseModel):
     content: str
     url: str
     date: datetime
-    score_id: Optional[str] = None
-    company_id: Optional[str] = None
-
-
-class Score(BaseModel):
-    id: Optional[str]
+    author: str
+    likes: int
+    comments: int
+    source: str
     sentiment_score: float
     sentiment: str
+    tickers: list[str] = []
+    company_id: Optional[str] = None
+
+class Comment(BaseModel):
+    id: Optional[str]
     article_id: str
+    content: str
+    date: datetime

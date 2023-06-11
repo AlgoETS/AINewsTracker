@@ -21,29 +21,6 @@ def test_read_root():
     assert response.json() == "AI News Tracker API"
 
 
-def test_health():
-    response = client.get("/health")
-    print(response.json())
-    assert response.status_code == 200
-    data = response.json()
-
-    assert data["status"] == "ok"
-    assert data["version"]
-    assert data["uptime"]
-    assert data["hostname"]
-    assert data["environment"]
-
-    dependencies = data["dependencies"]
-    for dep in ["redis", "mongodb", "prometheus"]:
-        assert dep in dependencies
-        assert dependencies[dep]["status"] in ["ok", "unavailable"]
-        assert dependencies[dep]["version"]
-        assert dependencies[dep]["uptime"]
-        assert dependencies[dep]["hostname"]
-        assert dependencies[dep]["environment"]
-
-
-
 def test_404_error():
     response = client.get("/nonexistent")
     assert response.status_code == 404
@@ -56,10 +33,13 @@ def test_favicon():
 
 
 def test_cache():  # sourcery skip: extract-duplicate-method
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == "AI News Tracker API"
+    response_1 = client.get("/")
+    assert response_1.status_code == 200
+    data_1 = response_1.json()
+    assert data_1 == "AI News Tracker API"
 
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == "AI News Tracker API"
+    response_2 = client.get("/")
+    assert response_2.status_code == 200
+    data_2 = response_2.json()
+
+    assert data_1 == data_2

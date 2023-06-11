@@ -1,5 +1,4 @@
-
-
+# -*- coding: utf-8 -*-
 from app.config import BASE_URL_FMP, FMP_API_KEY
 from app.core.services import make_api_request
 
@@ -8,6 +7,7 @@ def get_historical_price_full_crypto(symbol):
     api_endpoint = f"{BASE_URL_FMP}/historical-price-full/crypto/{symbol}"
     params = {"apikey": FMP_API_KEY}
     return make_api_request(api_endpoint, params)
+
 
 def get_all_crypto():
     """
@@ -34,8 +34,7 @@ def get_all_crypto():
         "DOGEUSD",
         "OMGUSD",
         "ZRXUSD",
-        "BATUSD"
-        "USDTUSD",
+        "BATUSD" "USDTUSD",
         "LINKUSD",
         "BTTUSD",
         "BNBUSD",

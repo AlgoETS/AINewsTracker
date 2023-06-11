@@ -4,19 +4,21 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
+
 class Settings:
     """Class to hold all environment settings."""
 
     _instance = None
 
-    def __new__(cls, env_file: Optional[str]= None, env: Optional[dict] = None):
+    def __new__(cls, env_file: Optional[str] = None, env: Optional[dict] = None):
         if cls._instance is None:
             cls._instance = super(Settings, cls).__new__(cls)
             cls._instance.__initiated = False
         return cls._instance
 
-    def __init__(self, env_file: Optional[str]= None, env: Optional[dict] = None):
-        if self.__initiated: return
+    def __init__(self, env_file: Optional[str] = None, env: Optional[dict] = None):
+        if self.__initiated:
+            return
         self.__initiated = True
         if env is None:
             self.env = os.environ
@@ -31,9 +33,14 @@ class Settings:
         self.RELOAD = bool(self.get_env_variable("RELOAD", True))
         self.PROMETHEUS_PORT = int(self.get_env_variable("PROMETHEUS_PORT", 8000))
 
-        self.SECRET_KEY = self.get_env_variable("SECRET_KEY", "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7")
+        self.SECRET_KEY = self.get_env_variable(
+            "SECRET_KEY",
+            "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7",
+        )
         self.ALGORITHM = self.get_env_variable("ALGORITHM", "HS256")
-        self.ACCESS_TOKEN_EXPIRE_MINUTES = int(self.get_env_variable("ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24 * 7))
+        self.ACCESS_TOKEN_EXPIRE_MINUTES = int(
+            self.get_env_variable("ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24 * 7)
+        )
 
         self.REDIS_HOST = self.get_env_variable("REDIS_HOST", "localhost")
         self.REDIS_PASSWORD = self.get_env_variable("REDIS_PASSWORD", "")
@@ -83,9 +90,13 @@ class Settings:
         self.ALPHAVANTAGE = self.get_env_variable("ALPHAVANTAGE")
 
         # MongDB
-        self.MONGODB_URL = self.get_env_variable("MONGODB_URL", "mongodb://localhost:27017")
+        self.MONGODB_URL = self.get_env_variable(
+            "MONGODB_URL", "mongodb://localhost:27017"
+        )
 
-    def get_env_variable(self, var_name: str, default: Optional[str] = None) -> Optional[str]:
+    def get_env_variable(
+        self, var_name: str, default: Optional[str] = None
+    ) -> Optional[str]:
         """Get environment variable value or return None if not found."""
         if var_value := self.env.get(var_name):
             return var_value

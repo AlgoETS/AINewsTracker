@@ -1,6 +1,8 @@
-import pytest
+# -*- coding: utf-8 -*-
 from datetime import date, datetime
+
 from app.models import User, UserDTO
+
 
 def test_user_model():
     """Test the User model"""

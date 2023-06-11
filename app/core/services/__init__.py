@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import httpx
+
 
 def make_api_request(api_endpoint, params):
     with httpx.Client() as client:

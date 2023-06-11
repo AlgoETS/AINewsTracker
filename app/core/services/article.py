@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 from transformers import pipeline
 
 # Load the summarizer
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+
 
 def summarize_article(article_text, max_length=130, min_length=30, do_sample=False):
     """
@@ -18,11 +20,14 @@ def summarize_article(article_text, max_length=130, min_length=30, do_sample=Fal
     """
 
     # Summarize the article
-    summary = summarizer(article_text, max_length=max_length, min_length=min_length, do_sample=do_sample)
+    summary = summarizer(
+        article_text, max_length=max_length, min_length=min_length, do_sample=do_sample
+    )
 
-    return summary[0]['summary_text']
+    return summary[0]["summary_text"]
+
 
 def summarizer(text: str):
     # Instantiate a pipeline for summarization
     summarization = pipeline("summarization")
-    return summarization(text)[0]['summary_text']
+    return summarization(text)[0]["summary_text"]

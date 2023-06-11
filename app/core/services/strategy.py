@@ -1,6 +1,5 @@
+# -*- coding: utf-8 -*-
 from typing import Callable, List
-import httpx
-from app.core.database import MongoDB
 
 
 def execute_trading_strategy(
@@ -10,7 +9,7 @@ def execute_trading_strategy(
     buy_stock: Callable[[str], None],
     sell_stock: Callable[[str], None],
     sentiment_threshold: float,
-    buy_sell_percentage: float
+    buy_sell_percentage: float,
 ):
     for company in companies_to_follow:
         news_articles = fetch_news(company)

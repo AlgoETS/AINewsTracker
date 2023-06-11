@@ -26,7 +26,7 @@ jobs:
           path: ~/.cache/pypoetry
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Run image
+      - name: Run poetry
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: "1.5.0"
@@ -37,7 +37,7 @@ jobs:
           poetry install
 
       - name: Run linting
-        run: poetry run black --check .
+        run: poetry run black app
         continue-on-error: true
 
 

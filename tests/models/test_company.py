@@ -1,5 +1,6 @@
-import pytest
+# -*- coding: utf-8 -*-
 from app.models import Company
+
 
 def test_company_model():
     """Test the Company model"""
@@ -11,7 +12,7 @@ def test_company_model():
         website="https://testcompany.com",
         industry="Technology",
         sector="Software",
-        country="USA"
+        country="USA",
     )
 
     assert company.id == "1"
