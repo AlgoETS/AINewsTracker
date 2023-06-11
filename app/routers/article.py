@@ -1,56 +1,55 @@
-from fastapi import APIRouter
-from typing import List, Optional
-from datetime import datetime
-from bson import ObjectId
-from ..models import Article, Score
-from ..core.database import collection_articles, collection_scores
+# -*- coding: utf-8 -*-
+from fastapi import APIRouter, HTTPException
 
-router = APIRouter()
+from app.core.repo.article import (
+    create_article,
+    get_all_articles,
+    get_article_by_id,
+    delete_article_by_id,
+    get_articles_by_company_id,
+    get_score_by_article_id
 
+)
+from app.models import Article
+
+router = APIRouter(
+    prefix="/articles",
+    tags=["articles"],
+    responses={404: {"description": "Not found"}},
+)
 
 @router.post("/articles")
-def create_article(article: Article):
-    article_dict = article.dict()
-    article_dict["_id"] = str(ObjectId())
-    result = collection_articles.insert_one(article_dict)
-    return result.inserted_id
+def create_article_handler(article: Article):
+    article_id = create_article(article)
+    return {"message": "Article created successfully", "article_id": article_id}
 
 
-@router.get("/articles")
-def get_all_articles():
-    articles = collection_articles.find()
-    return [Article(**article) for article in articles]
-
+@router.get("/articles", response_model=list[Article])
+def get_all_articles_handler():
+    return get_all_articles()
 
 @router.get("/articles/{article_id}")
-def get_article(article_id: str):
-    article = collection_articles.find_one({"_id": article_id})
-    return Article(**article) if article else None
-
-
-@router.put("/articles/{article_id}")
-def update_article(article_id: str, updated_article: Article):
-    updated_article_dict = updated_article.dict()
-    collection_articles.update_one({"_id": article_id}, {"$set": updated_article_dict})
-    return {"message": "Article updated successfully"}
+def get_article_handler(article_id: str):
+    
+    if article := get_article_by_id(article_id):
+        return article
+    else:
+        raise HTTPException(status_code=404, detail="Article not found")
 
 
 @router.delete("/articles/{article_id}")
-def delete_article(article_id: str):
-    collection_articles.delete_one({"_id": article_id})
-    return {"message": "Article deleted successfully"}
+def delete_article_handler(article_id: str):
+    deleted_count = delete_article_by_id(article_id)
+    if deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Article not found")
+    else:
+        return {"message": "Article deleted successfully","article_id": article_id}
 
 
 @router.get("/articles/{article_id}/score")
-def get_score_by_article_id(article_id: str):
-    score = collection_scores.find_one({"article_id": article_id})
-    return Score(**score) if score else None
-
-
-@router.post("/articles/{article_id}/score")
-def create_score(article_id: str, score: Score):
-    score_dict = score.dict()
-    score_dict["_id"] = str(ObjectId())
-    score_dict["article_id"] = article_id
-    result = collection_scores.insert_one(score_dict)
-    return result.inserted_id
+def get_score_by_article_id_handler(article_id: str):
+    score = get_score_by_article_id(article_id)
+    if score is None:
+        raise HTTPException(status_code=404, detail="Score not found")
+    else:
+        return {"score": score}

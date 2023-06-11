@@ -1,6 +1,12 @@
-from .source_object import Source
 
+class Source:
+    def __init__(self, name):
+        self.name = name
+        self.topics = []
 
+    def add_topics(self, topics):
+        self.topics.extend(topics)
+        
 class CNBC(Source):
     def __init__(self, topics=[]):
         super().__init__('CNBC')

@@ -23,7 +23,7 @@ from .core.database import MongoDB, RedisDB
 from .core.logging import Logger
 
 # import all routers
-from .routers import company, users
+from .routers import company, users , rss, article
 
 startup_time = datetime.now()
 
@@ -63,7 +63,8 @@ app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
 # add all routers to app
 app.include_router(users.router)
 app.include_router(company.router)
-
+app.include_router(rss.router)
+app.include_router(article.router)
 # CORS
 app.add_middleware(
     CORSMiddleware,
