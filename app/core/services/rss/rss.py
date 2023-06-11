@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import feedparser
 import time
 
-from ...models.article import Article
+from ...repo.article import Article
 
 
 class RSSFeed:

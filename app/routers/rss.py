@@ -1,11 +1,14 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from bson import ObjectId
-from ..services.source import Source
-from .database import collection_companies
-from rss_feed import RSSFeed
+from ..core.services.rss.source_object import Source
+from ..core.services.rss.rss import RSSFeed
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/rss",
+    tags=["rss"],
+    responses={404: {"description": "Not found"}},
+)
 rss_feed = RSSFeed()
 
 

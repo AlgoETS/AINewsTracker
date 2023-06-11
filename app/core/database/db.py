@@ -18,6 +18,7 @@ class MongoDB:
             cls._instance = super().__new__(cls)
 
             # Connect to MongoDB
+            print(settings.MONGODB_URL)
             cls._instance._client = MongoClient(settings.MONGODB_URL)
             cls._instance._db = cls._instance._client["AINewsTracker"]
             cls._instance.create_collections(["companies", "articles", "news_feed", "users"])

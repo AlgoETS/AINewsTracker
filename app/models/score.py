@@ -1,8 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
-from .database import collection_scores
+from ..core.database import collection_scores
 from bson import ObjectId
-from .models import Score
 
 class Score(BaseModel):
     sentiment_score: float

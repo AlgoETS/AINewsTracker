@@ -3,7 +3,7 @@ from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
 from ..models import Article, Score
-from .database import collection_articles, collection_scores
+from ..core.database import collection_articles, collection_scores
 
 router = APIRouter()
 

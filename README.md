@@ -40,10 +40,6 @@ AINewsTracker aggregates financial news from multiple trusted sources globally a
 2. Run the following command to install the required dependencies:
 
 ```shell
-# creates a virtualenv
-python3.10 -m venv venv
-# activates the virtualenv
-source venv/bin/activate
 pip install poetry
 poetry shell
 poetry install
