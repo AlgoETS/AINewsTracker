@@ -29,7 +29,11 @@ class UserCreate(BaseModel):
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"],
+    responses={404: {"description": "Not found"}},
+)
 
 def get_password_hash(password: str):
     return pwd_context.hash(password)
@@ -54,8 +58,11 @@ def authenticate_user(email: str, password: str):
 
 @router.post("/signup", response_model=UserDTO)
 async def create_user(user: UserCreate):
-    db_user = MongoDB().get_collection("users").find_one({"email": user.email})
-    if db_user:
+    if (
+        db_user := MongoDB()
+        .get_collection("users")
+        .find_one({"email": user.email})
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"

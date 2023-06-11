@@ -165,7 +165,7 @@ async def read_health():
         mongodb_health = get_service_health(
             mongodb_instance.check_connection,
             mongodb_instance.get_info,
-            mongodb_instance.get_client().address[0],
+            mongodb_instance.get_hostname(),
         )
 
         return {

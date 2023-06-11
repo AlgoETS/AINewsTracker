@@ -62,6 +62,11 @@ class MongoDB:
     def close(self):
         self._client.close()
 
+    def get_hostname(self):
+        if self._client is None:
+            return "unknown"
+        return self._client.HOST
+
 
 class RedisDB:
     _instance = None
