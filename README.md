@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="50%" src="./AINewsTracker_transparent.svg" alt="AINewsTracker"/>
+    <img width="50%" src="./docs/AINewsTracker_transparent.svg" alt="AINewsTracker"/>
     <h1 align="center">AINewsTracker </h1>
 </p>
 
