@@ -36,9 +36,14 @@ AINewsTracker aggregates financial news from multiple trusted sources globally a
 ## How to use
 
 1. Setup and activate the Python environment of your choice.
+   1. `cp .env.example .env`
 2. Run the following command to install the required dependencies:
 
 ```shell
+# creates a virtualenv
+python3.10 -m venv venv
+# activates the virtualenv
+source venv/bin/activate
 pip install poetry
 poetry shell
 poetry install
