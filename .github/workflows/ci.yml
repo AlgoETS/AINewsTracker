@@ -72,6 +72,6 @@ jobs:
 
       - name: Run app (briefly)
         run: |
-          uvicorn app.main:app --reload --port 8000 &
+          poetry run uvicorn app.main:app --reload --port 8000 &
           sleep 5 &&
           kill $!

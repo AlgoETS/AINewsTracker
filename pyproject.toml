@@ -34,7 +34,7 @@ aiofiles = "^23.1.0"
 types-aiofiles = "^23.1.0.4"
 slowapi = "^0.1.8"
 asyncio = "^3.4.3"
-
+https://www.thestreameast.to/ufc/ufc-289-nunes-vs-aldana/3
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"
 black = "^23.1.0"
