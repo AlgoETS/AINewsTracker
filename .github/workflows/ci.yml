@@ -1,0 +1,77 @@
+name: Python application CI
+
+on:
+  pull_request:
+
+env:
+  FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+  BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+  BINANCE_API_SECRET_KEY: ${{ secrets.BINANCE_API_SECRET_KEY }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.12"
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Run poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.5.0"
+
+      - name: Install dependencies
+        run: |
+          pip install genbadge defusedxml
+          poetry install
+
+      - name: Run linting
+        run: poetry run black app
+        continue-on-error: true
+
+
+      - name: Run type checks
+        run: poetry run mypy .
+        continue-on-error: true
+
+      - name: Run security checks
+        run: poetry run bandit -r app
+        continue-on-error: true
+
+      - name: Run tests
+        run: |
+          poetry run coverage run -m pytest
+          poetry run coverage report -m
+          poetry run pytest --cov=app --cov-report=xml --cov-report=html
+          genbadge coverage -o .github/badge/coverage.svg -i coverage.xml
+
+      - name: Codecov report
+        uses: codecov/codecov-action@v3
+        with:
+          target: 55%
+          threshold: 0.1
+          files: "coverage.xml"
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true
+
+      - name: Build docs
+        run: poetry run sphinx-build -b html docs/source docs/build
+        continue-on-error: true
+
+      - name: Run app (briefly)
+        run: |
+          poetry run uvicorn app.main:app --reload --port 8000 &
+          sleep 5 &&
+          kill $!
