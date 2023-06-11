@@ -1,4 +1,4 @@
-ARG VARIANT=3.10-buster
+ARG VARIANT=3.11-buster
 
 # First stage: create a non-root user and install Python dependencies
 FROM python:${VARIANT} AS base
