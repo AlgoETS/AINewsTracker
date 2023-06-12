@@ -69,12 +69,9 @@ jobs:
       - name: Codecov report
         uses: codecov/codecov-action@v3
         with:
-          target: 55%
-          threshold: 0.1
           files: "coverage.xml"
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
-        continue-on-error: true
 
       - name: Build docs
         run: poetry run sphinx-build -b html docs/source docs/build
