@@ -7,7 +7,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from app.core.repo.article import create_articles
-from app.core.services.finbert import analyze_sentiment
+from app.core.services.sentiments import analyze_sentiment
 from app.models.article import Article
 
 
