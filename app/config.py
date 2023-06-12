@@ -91,7 +91,7 @@ class Settings:
 
         # MongDB
         self.MONGODB_URL = self.get_env_variable(
-            "MONGODB_URL", "mongodb://localhost:27017"
+            "MONGODB_URL", "mongodb://mongo:mongo@localhost:27017/"
         )
 
     def get_env_variable(

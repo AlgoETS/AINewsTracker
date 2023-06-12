@@ -1,11 +1,9 @@
-import asyncio
-from unittest.mock import patch, MagicMock, AsyncMock
-import pytest_asyncio
-import pytest
-from app.core.database.db import MongoDB, RedisDB
-from app.config import Settings
+# -*- coding: utf-8 -*-
+from unittest.mock import AsyncMock, patch
 
-from app.main import get_service_health
+import pytest
+
+from app.core.database.db import MongoDB, RedisDB
 
 
 def test_mongodb_singleton():
@@ -13,20 +11,23 @@ def test_mongodb_singleton():
     mongodb2 = MongoDB()
     assert mongodb1 is mongodb2, "MongoDB is not a singleton"
 
+
 # @pytest.skip("Not implemented")
 @pytest.mark.asyncio
 @patch.object(MongoDB, "get_info", return_value={})
 @patch.object(MongoDB, "check_server_info", new_callable=AsyncMock)
 @patch.object(MongoDB, "check_ping", new_callable=AsyncMock)
-async def test_mongodb_check_connection(mock_check_ping, mock_check_server_info, mock_mongo_client):
+async def test_mongodb_check_connection(
+    mock_check_ping, mock_check_server_info, mock_mongo_client
+):
     mock_check_server_info.return_value = True
     mock_check_ping.return_value = True
 
     mongodb = MongoDB()
     result = await mongodb.check_connection()
 
-    assert (
-        isinstance(mongodb.get_info(), dict)
+    assert isinstance(
+        mongodb.get_info(), dict
     ), "MongoDB get_info method is not working correctly"
 
 

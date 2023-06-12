@@ -12,6 +12,14 @@ def create_company(company: Company):
     return result.inserted_id
 
 
+def create_companies(companies: list[Company]):
+    company_dicts = [company.dict() for company in companies]
+    for company_dict in company_dicts:
+        company_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string
+    result = MongoDB().get_collection("companies").insert_many(company_dicts)
+    return result.inserted_ids
+
+
 def get_all_companies() -> list[Company]:
     companies = MongoDB().get_collection("companies").find()
     return [Company(**company) for company in companies]

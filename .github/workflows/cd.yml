@@ -1,0 +1,55 @@
+name: Python application CD
+
+on:
+  release:
+    types:
+      - created
+
+env:
+  FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+  BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+  BINANCE_API_SECRET_KEY: ${{ secrets.BINANCE_API_SECRET_KEY }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v3
+
+      - name: Install system packages
+        run: |
+          sudo apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.12"
+
+      - uses: Jimver/cuda-toolkit@v0.2.10
+        id: cuda-toolkit
+        with:
+          cuda: "12.1.0"
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Run poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.5.0"
+
+      - name: Install dependencies
+        run: |
+          poetry install
+          poetry lock
+
+
+      - name: Deploy to production
+        if: github.ref == 'refs/tags/*'
+        run: |
+          # Add deployment steps here
+          # Example: Deploy to production server or package the application

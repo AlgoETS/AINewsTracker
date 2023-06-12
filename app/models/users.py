@@ -6,25 +6,25 @@ from pydantic import BaseModel
 
 
 class UserDTO(BaseModel):
-    name: str
+    email: Optional[str] = None
 
 
 class User(BaseModel):
     id: Optional[str]
-    nom_famille: str
-    prenom: str
-    courriel: str
-    telephone: str
-    anniversaire: date
-    adresse: str
-    ville: str
+    last_name: str
+    first_name: str
+    email: str
+    phone: str
+    birthday: date
+    address: str
+    city: str
     province: str
-    code_postal: str
+    postal_code: str
     password: str
-    forfait: str
+    plan: str
     credit_id: int
     points: int
-    solde: float
+    balance: float
     friends: list[int] = []
     last_login: date
     last_logout: datetime

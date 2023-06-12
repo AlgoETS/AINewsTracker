@@ -9,8 +9,8 @@ from app.core.repo.company import (
 from app.models import Company
 
 router = APIRouter(
-    prefix="/companies",
-    tags=["companies"],
+    prefix="/company",
+    tags=["Company"],
     responses={404: {"description": "Not found"}},
 )
 

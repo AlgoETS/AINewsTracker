@@ -1,11 +1,14 @@
-import os
-from pymongo import MongoClient
-import redis
-from app.config import Settings
+# -*- coding: utf-8 -*-
 import asyncio
+import os
 from concurrent.futures import ThreadPoolExecutor
 
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else ".env"
+import redis
+from pymongo import MongoClient
+
+from app.config import Settings
+
+env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../../.env"
 
 settings = Settings(env_file)
 
@@ -20,7 +23,9 @@ class MongoDB:
             # Connect to MongoDB
             cls._instance._client = MongoClient(settings.MONGODB_URL)
             cls._instance._db = cls._instance._client["AINewsTracker"]
-            cls._instance.create_collections(["companies", "articles", "news_feed", "users"])
+            cls._instance.create_collections(
+                ["companies", "articles", "news_feed", "users"]
+            )
         return cls._instance
 
     def create_collections(self, collection_names):
@@ -38,7 +43,9 @@ class MongoDB:
     async def check_ping(self):
         loop = asyncio.get_event_loop()
         with ThreadPoolExecutor() as pool:
-            result = await loop.run_in_executor(pool, self._client.admin.command, "ping")
+            result = await loop.run_in_executor(
+                pool, self._client.admin.command, "ping"
+            )
         return result
 
     async def check_connection(self):
@@ -61,6 +68,11 @@ class MongoDB:
 
     def close(self):
         self._client.close()
+
+    def get_hostname(self):
+        if self._client is None:
+            return "unknown"
+        return self._client.HOST
 
 
 class RedisDB:
@@ -93,7 +105,6 @@ class RedisDB:
             print(f"Connection failed with error: {str(e)}")
             return False
 
-
     def get_info(self):
         return self._connection.info() if self._connection else None
 
@@ -105,3 +116,5 @@ class RedisDB:
             return "unknown"
         return self._connection.connection_pool.connection_kwargs["host"]
 
+    def close(self):
+        self._connection.close()
