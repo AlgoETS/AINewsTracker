@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-from app.core.logging import logger
+from app.core.logging import Logger
+
+logger = Logger().get_logger()
 
 try:
     import torch
-except ImportError:
+except (ImportError, ValueError, Exception) as e:
     torch = None
     logger.warning("Unable to import torch. Some functionality may be unavailable.")
+    logger.error(str(e))
 
 
 from transformers import AutoModelForSequenceClassification, AutoTokenizer

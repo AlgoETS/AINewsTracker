@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "AINewsTracker"
-version = "module:app.__version__"
+version = "0.1.2"
 description = "A web application for backtesting the influence of financial news on the stock market using AI."
 authors = ["Antoine Boucher <antoine.boucher012@gmail.com>", "Mohamed Ilias <Mohamed.ilias.1@ens.etsmtl.ca>", "Makhlouf Hennine <makhlouf.hennine.1@ens.etsmtl.ca>"]
 readme = "README.md"
