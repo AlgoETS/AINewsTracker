@@ -1,11 +1,8 @@
-# Python fastapi app using poetry
-
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
 
 ARG PYTHONUNBUFFERED=1
 ENV PORT=8080
-ARG HOST=0.0.0.0
-
+ENV HOST=0.0.0.0
 
 # Stage 1 - Build
 
@@ -19,7 +16,11 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN poetry install
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi
 
-# Run app
-CMD uvicorn app.app:app --port $PORT --host=$HOST
+# Expose the port
+EXPOSE $PORT
+
+# Run the app
+CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
