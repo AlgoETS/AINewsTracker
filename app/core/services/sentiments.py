@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from app.core.logging import Logger
+from app.core.services import make_api_request
 
 logger = Logger().get_logger()
 
@@ -56,14 +57,10 @@ def analyze_sentiment(text):
 
 
 def get_social_sentiment(ticker: str):
-    api_endpoint = "https://financialmodelingprep.com/api/v4/historical/social-sentiment"
-    params = {
-            "symbol": "AAPL",
-            "page": "0",
-            "apikey": "YOUR_API_KEY"
-    }
+    api_endpoint = (
+        "https://financialmodelingprep.com/api/v4/historical/social-sentiment"
+    )
+    params = {"symbol": "AAPL", "page": "0", "apikey": "YOUR_API_KEY"}
 
     response = make_api_request(api_endpoint, params)
-    if response is not None:
-        return response.json()
-    return None
+    return response.json() if response is not None else None
