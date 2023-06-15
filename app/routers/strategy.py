@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import APIRouter
 
 router = APIRouter()
@@ -10,8 +11,6 @@ def execute_trading_strategy(company: str):
     buy_stock = buy_stock_function
     sell_stock = sell_stock_function
     sentiment_threshold = 0.5
-    buy_sell_percentage = 0.7
-
     news_articles = fetch_news(company)
 
     positive_count = 0
@@ -30,6 +29,8 @@ def execute_trading_strategy(company: str):
     if total_count > 0:
         positive_ratio = positive_count / total_count
         negative_ratio = negative_count / total_count
+
+        buy_sell_percentage = 0.7
 
         if positive_ratio > buy_sell_percentage:
             buy_stock(company)
