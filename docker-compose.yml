@@ -14,6 +14,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    labels:
+      - "version=latest"
+      - "description=Redis for caching"
+      - "type=caching"
+
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -28,6 +33,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    labels:
+      - "version=1.0.0"
+      - "description=MongoDB NoSQl main database"
+      - "type=database"
+
   web:
     build: .
     environment:
@@ -36,9 +46,13 @@ services:
       - REDIS_PASSWORD=redis
     ports:
       - 8000:8000
-    command: uvicorn app.main:app --host
+    command: uvicorn app.main:app --host 0.0.0.0
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 5
+    labels:
+      - "version=0.1.2"
+      - "description=AINewsTracker"
+      - "type=api"
