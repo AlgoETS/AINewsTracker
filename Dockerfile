@@ -19,9 +19,6 @@ COPY . .
 RUN poetry config virtualenvs.create false && \
     poetry install --no-interaction --no-ansi
 
-# Build the app
-RUN poetry build
-
 # Expose the port
 EXPOSE $PORT
 
