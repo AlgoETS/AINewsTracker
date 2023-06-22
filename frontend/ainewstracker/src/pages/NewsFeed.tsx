@@ -8,7 +8,6 @@ const NewsFeeds = () => {
         const dummyData = [
             {id: '1', link: 'https://example.com', number_of_articles: 10, sector: 'Tech', country: 'USA', language: 'English', type: 'Web'},
             {id: '2', link: 'https://example2.com', number_of_articles: 5, sector: 'Finance', country: 'UK', language: 'English', type: 'Web'},
-            // More dummy data...
         ];
 
         setFeeds(dummyData);

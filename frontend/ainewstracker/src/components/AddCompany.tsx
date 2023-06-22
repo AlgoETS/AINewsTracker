@@ -11,11 +11,11 @@ const AddCompany = () => {
         country: ''
     });
 
-    const handleChange = e => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCompany({ ...company, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(company);
         // Call your API to add company
