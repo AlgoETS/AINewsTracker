@@ -19,7 +19,7 @@ class Article(BaseModel):
     sentiment: str
     tickers: Optional[list[str]] = []
     company_id: Optional[str] = None
-
+    topic: Optional[str] = None
 
 class Comment(BaseModel):
     id: Optional[str]

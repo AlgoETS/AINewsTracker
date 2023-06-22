@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 
-from app.core.services.rss.rss import RSSFeed
+from app.core.services.rss.feedFetcher import FeedFetcher
 from app.core.services.rss.source import (
     CNBC,
     FT,
@@ -23,7 +23,7 @@ router = APIRouter(
     tags=["RSS"],
     responses={404: {"description": "Not found"}},
 )
-rss_feed = RSSFeed()
+rss_feed = FeedFetcher()
 
 sources = {
     "CNBC": CNBC(),

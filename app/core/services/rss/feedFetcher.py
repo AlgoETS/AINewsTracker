@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from app.core.repo.article import create_articles
 from app.core.services.sentiments import analyze_sentiment
+from app.core.services.summarizer import summarize_text
 from app.core.services.topic_classification import classify_topic
 from app.models.article import Article
 
