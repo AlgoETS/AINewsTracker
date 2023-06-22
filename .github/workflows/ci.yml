@@ -61,6 +61,7 @@ jobs:
 
       - name: Run tests
         run: |
+          export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
           poetry run coverage run -m pytest
           poetry run coverage report -m
           poetry run pytest --cov=app --cov-report=xml --cov-report=html
