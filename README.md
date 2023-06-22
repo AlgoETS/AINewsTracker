@@ -22,8 +22,8 @@ AINewsTracker is a sophisticated web application that backtests the influence of
 
 ## Features
 
-- **Real-time tracking of financial news**: Get up-to-date news articles from over 60,000 sources.
-- **AI-based analysis**: Leverage artificial intelligence for sentiment analysis, trend prediction, and anomaly detection.
+- **Real-time tracking of financial news**: Get up-to-date news articles from over 60 sources.
+- **AI-based analysis**: Leverage artificial intelligence for sentiment analysis, topic prediction, and tickers allocation.
 - **Backtesting capabilities**: Explore the influence of past news on market behavior and verify your predictive models.
 - **Versatile data sources**: Gain insights from a wide range of international and regional news providers.
 
