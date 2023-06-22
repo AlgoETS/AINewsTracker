@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from app.core.repo.article import create_articles
 from app.core.services.sentiments import analyze_sentiment
+from app.core.services.topic_classification import classify_topic
 from app.models.article import Article
 
 
@@ -61,6 +62,8 @@ class RSSFeed:
                 date=datetime.fromtimestamp(time.mktime(entry.get("published_parsed"))),
                 sentiment=most_sentiment,
                 sentiment_score=most_sentiment_score,
+                summary=summarize_text(text_content),
+                topic=classify_topic(text_content),
             )
             articles.append(article)
         await create_articles(articles)
