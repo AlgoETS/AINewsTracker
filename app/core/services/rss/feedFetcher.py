@@ -12,7 +12,7 @@ from app.core.services.topic_classification import classify_topic
 from app.models.article import Article
 
 
-class RSSFeed:
+class FeedFetcher:
     def __init__(self):
         self.client = httpx.AsyncClient()  # initialize the AsyncClient
         self.unwanted_tags = [
