@@ -11,8 +11,8 @@ from app.models.users import UserDTO
 
 settings = Settings()
 
-SECRET_KEY = settings.secret_key
-ALGORITHM = settings.algorithm
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -63,3 +63,7 @@ def get_user(email: str) -> Optional[UserDTO]:
 
 def get_user_by_email(email: str):
         return MongoDB().get_collection("users").find_one({"email": email})
+
+def insert_new_user(user: dict):
+    user_collection.insert_one(user)
+    return UserDTO(**user)

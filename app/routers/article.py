@@ -20,12 +20,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-router = APIRouter(
-    prefix="/articles",
-    tags=["Articles"],
-    responses={404: {"description": "Not found"}},
-)
-
 @router.post("/")
 def create_article_handler(article: Article):
     article_id = create_article(article)
