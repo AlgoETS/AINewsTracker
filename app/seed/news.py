@@ -61,9 +61,7 @@ class NewsSeeder:
     async def create_news(cls,data: List[dict]) -> List[Article]:
         articles = []
         for article in data:
-
             article_processed = await NewsFetcher().process_fmp_article(article)
-            print(article_processed)
             articles.append(article_processed)
         return articles
 
