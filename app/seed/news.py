@@ -3,18 +3,18 @@ import httpx
 import csv
 from datetime import datetime
 from typing import List
-
 from app.config import Settings
-from app.core.repo.news import create_news
-from app.models.news import News
+from app.core.repo.article import create_article
+from app.models.article import Article
+from app.core.services.news import NewsFetcher
 import os
 class NewsSeeder:
     settings = Settings()
-    API_KEY = settings.NEWS_API
-    NEWS_URL = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={API_KEY}"
+    API_KEY = settings.FMP_API_KEY
+    NEWS_URL = f"https://financialmodelingprep.com/api/v3/stock_news?page=0&apikey={API_KEY}"
 
     @staticmethod
-    def generate_csv(news_list: List[News], filename: str):
+    def generate_csv(news_list: List[Article], filename: str):
         with open(filename, "w", newline="") as csvfile:
             fieldnames = [
                 "source_name",
@@ -35,34 +35,35 @@ class NewsSeeder:
             writer.writeheader()
             for news_item in news_list:
                 writer.writerow(news_item.dict())
+    
+    @classmethod
+    async def get_news_data(cls, tickers: str = "", page: int = 0):
+        tickers_param = f"tickers={tickers}&" if tickers else ""
+        url = f"https://financialmodelingprep.com/api/v3/stock_news?{tickers_param}page={page}&apikey={cls.API_KEY}"
+
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(url)
+                response.raise_for_status()  # Raise an exception if an HTTP error occurred
+                return {"articles": response.json()[:2]}
+                
+            except httpx.RequestError as e:
+                print(f"Error making the request: {e}")
+            except httpx.HTTPStatusError as e:
+                print(f"HTTP error occurred: {e}")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            return []
+    
+
 
     @classmethod
-    async def get_news_data(cls):
-        async with httpx.AsyncClient() as client:
-            response = await client.get(cls.NEWS_URL)
-        return response.json()
-
-    @staticmethod
-    def create_news(data: List[dict]) -> List[News]:
-        news_list = []
-        for news_data in data:
-            news_item = News(
-                source_name=news_data["source"]["name"],
-                topics=[],
-                country=news_data.get("country", ""),
-                language=news_data.get("language", ""),
-                type=news_data.get("type", ""),
-                source_url=news_data["url"],
-                id=news_data["source"]["id"],
-                link=news_data["url"],
-                data=news_data,
-                number_of_articles=0,
-                last_fetch=datetime.now(),
-                last_update=datetime.now(),
-                last_article=datetime.now()
-            )
-            news_list.append(news_item)
-        return news_list
+    async def create_news(cls,data: List[dict]) -> List[Article]:
+        articles = []
+        for article in data:
+            article_processed = await NewsFetcher().process_fmp_article(article)
+            articles.append(article_processed)
+        return articles
 
     @classmethod
     async def get_news_and_save_to_csv(cls, filename: str):
@@ -73,5 +74,5 @@ class NewsSeeder:
     @classmethod
     async def seed_news(cls):
         data = await cls.get_news_data()
-        news_list = cls.create_news(data["articles"])
-        create_news(news_list)
+        news_list = await  cls.create_news(data["articles"])
+        await create_article(news_list)

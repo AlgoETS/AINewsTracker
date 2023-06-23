@@ -68,7 +68,6 @@ class TextMetrics:
     def detect_ticker(self, text: str) -> Dict[str, Any]:
         return self.ticker_pipeline(text)
 
-    @requires_cuda
     def summarize_text(self, text: str) -> str:
         inputs = self.summarizer_tokenizer(
             text,
@@ -84,7 +83,6 @@ class TextMetrics:
         )
         return summary[0]
 
-    @requires_cuda
     def analyze_sentiment(self, text: str) -> Dict[str, Any]:
         inputs = self.sentiment_tokenizer.encode_plus(
             text,
