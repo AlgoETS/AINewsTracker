@@ -29,7 +29,7 @@ class MongoDB:
         
         # Create index on "symbol" key for the "companies" collection
         self._collections["companies"].create_index([("symbol", ASCENDING)])
-
+        self._collections["articles"].create_index([("url", ASCENDING)])
     def get_collection(self, collection_name):
         return self._collections.get(collection_name, None)
 

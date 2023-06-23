@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from app.core.database.db import MongoDB
 from app.models.article import Article
 from bson.objectid import ObjectId
@@ -7,14 +7,22 @@ from bson.objectid import ObjectId
 mongo_db = MongoDB()
 collection = mongo_db.get_collection("articles")
 
-async def create_article(article: Article):
-    article_dict = article.dict()
-    article_dict["_id"] = str(ObjectId())
-    return await collection.insert_one(article_dict)
+async def create_article(articles: List[Article]):
+    news = [dict(item.dict()) for item in articles]
+    inserted_ids = []
+    for news_item in news:
+        filter_query = {"url": news_item["url"]}  # filter condition for the upsert
+        update_query = {"$set": news_item}  # update operation
 
-async def create_articles(articles: list[Article]):
-    articles = [dict(item.dict(), _id=str(ObjectId())) for item in articles]
-    return await collection.insert_many(articles)
+        # upsert operation
+        result = await collection.update_one(filter_query, update_query, upsert=True)
+        
+        # If a new document was inserted, retrieve the inserted ID
+        if result.upserted_id:
+            inserted_ids.append(result.upserted_id)
+
+    return inserted_ids
+
 
 async def get_all_articles() -> list[Article]:
     articles = await collection.find().to_list(length=100)

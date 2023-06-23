@@ -3,13 +3,13 @@ import httpx
 import logging
 import time
 from datetime import datetime
-
+from urllib.parse import urlparse
 import feedparser
 from bs4 import BeautifulSoup
 from app.config import Settings
 from app.core.logging import Logger
 
-from app.core.repo.article import create_articles
+from app.core.repo.article import create_article
 from app.core.services.metrics import TextMetrics
 from app.models.article import Article
 
@@ -86,7 +86,7 @@ class NewsFetcher:
                 article = await self.process_article(article_data, content)
                 articles.append(article)
 
-        await create_articles(articles)
+        await create_article(articles)
         return articles
 
     async def fetch_gnews_articles(self, api_key: str, query: str, lang: str, country: str, max_results: int):
@@ -103,7 +103,7 @@ class NewsFetcher:
             article = await self.process_article(article_data, text_content)
             articles.append(article)
 
-        await create_articles(articles)
+        await create_article(articles)
         return articles
 
     async def fetch_feed_entries(self, source, limit):
@@ -125,7 +125,7 @@ class NewsFetcher:
             article = await self.process_article(entry, text_content)
             articles.append(article)
 
-        await create_articles(articles)
+        await create_article(articles)
         return articles
 
     async def get_entry_text(self, link):
@@ -146,3 +146,21 @@ class NewsFetcher:
         # Get the text content
         text = soup.get_text(separator=" ")
         return text.strip() if text else None
+    
+    def extract_source(self,url: str) -> str:
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc
+        if domain.startswith("www."):
+            domain = domain[4:]  # Remove "www." from the domain
+        return domain
+    
+    async def process_fmp_article(self, article_dict: dict):
+        content = article_dict.get("text")
+        sentiment = self.text_metrics.analyze_sentiment(content)
+        most_sentiment = max(sentiment, key=sentiment.get)
+        most_sentiment_score = sentiment[most_sentiment]
+        article_dict["source_name"] = self.extract_source(article_dict["url"])
+        article_dict["sentiment"] = most_sentiment
+        article_dict["sentiment_score"] = most_sentiment_score
+        article_dict["tickers"] = [article_dict["symbol"]]
+        return Article(**article_dict)
