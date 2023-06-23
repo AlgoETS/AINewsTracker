@@ -1,76 +1,43 @@
 # -*- coding: utf-8 -*-
+from enum import Enum
+from typing import List
 from app.config import BASE_URL_FMP, FMP_API_KEY
 from app.core.services import make_api_request
 
+class CryptoSymbol(Enum):
+    BTCUSD = "BTCUSD"
+    ETHUSD = "ETHUSD"
+    LTCUSD = "LTCUSD"
+    BCHUSD = "BCHUSD"
+    XRPUSD = "XRPUSD"
+    EOSUSD = "EOSUSD"
+    XLMUSD = "XLMUSD"
+    TRXUSD = "TRXUSD"
+    ETCUSD = "ETCUSD"
+    DASHUSD = "DASHUSD"
+    ZECUSD = "ZECUSD"
+    XTZUSD = "XTZUSD"
+    XMRUSD = "XMRUSD"
+    ADAUSD = "ADAUSD"
+    NEOUSD = "NEOUSD"
+    XEMUSD = "XEMUSD"
+    VETUSD = "VETUSD"
+    DOGEUSD = "DOGEUSD"
+    OMGUSD = "OMGUSD"
+    ZRXUSD = "ZRXUSD"
+    BATUSD = "BATUSD"
+    USDTUSD = "USDTUSD"
+    LINKUSD = "LINKUSD"
+    BTTUSD = "BTTUSD"
+    BNBUSD = "BNBUSD"
+    # and so on...
 
-def get_historical_price_full_crypto(symbol):
-    api_endpoint = f"{BASE_URL_FMP}/historical-price-full/crypto/{symbol}"
+
+def get_historical_price_full_crypto(symbol: CryptoSymbol):
+    api_endpoint = f"{BASE_URL_FMP}/historical-price-full/crypto/{symbol.value}"
     params = {"apikey": FMP_API_KEY}
     return make_api_request(api_endpoint, params)
 
 
-def get_all_crypto():
-    """
-    All possible crypto symbols
-    """
-    return [
-        "BTCUSD",
-        "ETHUSD",
-        "LTCUSD",
-        "BCHUSD",
-        "XRPUSD",
-        "EOSUSD",
-        "XLMUSD",
-        "TRXUSD",
-        "ETCUSD",
-        "DASHUSD",
-        "ZECUSD",
-        "XTZUSD",
-        "XMRUSD",
-        "ADAUSD",
-        "NEOUSD",
-        "XEMUSD",
-        "VETUSD",
-        "DOGEUSD",
-        "OMGUSD",
-        "ZRXUSD",
-        "BATUSD" "USDTUSD",
-        "LINKUSD",
-        "BTTUSD",
-        "BNBUSD",
-        "ONTUSD",
-        "QTUMUSD",
-        "ALGOUSD",
-        "ZILUSD",
-        "ICXUSD",
-        "KNCUSD",
-        "ZENUSD",
-        "THETAUSD",
-        "IOSTUSD",
-        "ATOMUSD",
-        "MKRUSD",
-        "COMPUSD",
-        "YFIUSD",
-        "SUSHIUSD",
-        "SNXUSD",
-        "UMAUSD",
-        "BALUSD",
-        "AAVEUSD",
-        "UNIUSD",
-        "RENBTCUSD",
-        "RENUSD",
-        "CRVUSD",
-        "SXPUSD",
-        "KSMUSD",
-        "OXTUSD",
-        "DGBUSD",
-        "LRCUSD",
-        "WAVESUSD",
-        "NMRUSD",
-        "STORJUSD",
-        "KAVAUSD",
-        "RLCUSD",
-        "BANDUSD",
-        "SCUSD",
-        "ENJUSD",
-    ]
+def get_all_crypto() -> List[CryptoSymbol]:
+    return list(CryptoSymbol)

@@ -1,30 +1,27 @@
-# -*- coding: utf-8 -*-
-from bson import ObjectId
+from typing import Optional, List
+from bson.objectid import ObjectId
 
 from app.core.database import MongoDB
 from app.models.company import Company
 
+mongo_db = MongoDB()
+collection = mongo_db.get_collection("companies")
 
-def create_company(company: Company):
+async def create_company(company: Company):
     company_dict = company.dict()
-    company_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string
-    result = MongoDB().get_collection("companies").insert_one(company_dict)
+    company_dict["_id"] = str(ObjectId())
+    result = await collection.insert_one(company_dict)
     return result.inserted_id
 
-
-def create_companies(companies: list[Company]):
-    company_dicts = [company.dict() for company in companies]
-    for company_dict in company_dicts:
-        company_dict["_id"] = str(ObjectId())  # Convert ObjectId to a string
-    result = MongoDB().get_collection("companies").insert_many(company_dicts)
+async def create_companies(companies: List[Company]):
+    companies = [dict(item.dict(), _id=str(ObjectId())) for item in companies]
+    result = await collection.insert_many(companies)
     return result.inserted_ids
 
-
-def get_all_companies() -> list[Company]:
-    companies = MongoDB().get_collection("companies").find()
+async def get_all_companies() -> List[Company]:
+    companies = await collection.find().to_list(length=100)  # specify max limit here
     return [Company(**company) for company in companies]
 
-
-def get_company_by_ticker(ticker: str) -> Company:
-    company = MongoDB().get_collection("companies").find_one({"ticker": ticker})
+async def get_company_by_ticker(ticker: str) -> Optional[Company]:
+    company = await collection.find_one({"ticker": ticker})
     return Company(**company) if company else None

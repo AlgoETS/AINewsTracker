@@ -1,28 +1,26 @@
-# -*- coding: utf-8 -*-
 from typing import Optional
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from app.config import Settings
 
 from app.core.database import MongoDB
 from app.models.users import UserDTO
 
-# to get a string like this run:
-# openssl rand -hex 32
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+settings = Settings()
+
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+mongo_db = MongoDB()
+user_collection = mongo_db.get_collection("users")
 
-# Use email instead of username
 class TokenData(BaseModel):
     email: Optional[str] = None
-
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -31,7 +29,6 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# Use email as identifier
 def authenticate_user(email: str, password: str):
     if user := get_user(email):
         return user if verify_password(password, user.password) else False
@@ -59,7 +56,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-# Use email as identifier
-def get_user(email: str) -> UserDTO:
-    user = MongoDB().get_collection("users").find_one({"email": email})
-    return UserDTO(**user)
+def get_user(email: str) -> Optional[UserDTO]:
+    if user := user_collection.find_one({"email": email}):
+        return UserDTO(**user)
+    return None
+
+def get_user_by_email(email: str):
+        return MongoDB().get_collection("users").find_one({"email": email})

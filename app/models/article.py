@@ -21,8 +21,14 @@ class Article(BaseModel):
     company_id: Optional[str] = None
     topic: Optional[str] = None
 
+    class Config:
+        arbitrary_types_allowed = True
+
 class Comment(BaseModel):
     id: Optional[str]
     article_id: str
     content: str
     date: datetime
+
+    class Config:
+        arbitrary_types_allowed = True
