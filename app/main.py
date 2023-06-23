@@ -11,6 +11,8 @@ from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from prometheus_fastapi_instrumentator import Instrumentator
+from app.seed.companies import CompanySeeder
+from app.seed.news import NewsSeeder
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
@@ -95,6 +97,9 @@ async def startup():
     except Exception:
         logger.error("Redis server not available")
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
+
+    CompanySeeder().seed_companies()
+    NewsSeeder().seed_news()
 
 
 @app.on_event("shutdown")

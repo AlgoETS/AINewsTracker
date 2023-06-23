@@ -1,7 +1,6 @@
 @startuml
 actor User
 
-User -> logger: Warning message
 User -> tokenizer: create AutoTokenizer
 User -> model: create AutoModelForSequenceClassification
 

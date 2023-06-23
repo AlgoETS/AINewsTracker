@@ -4,7 +4,7 @@ title Seeding Process
 autonumber
 
 actor Seeder
-participant AsyncClient as Client
+participant Client as Client
 participant Repo as Database
 database CSV
 

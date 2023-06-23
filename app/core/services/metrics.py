@@ -16,7 +16,7 @@ try:
         AutoTokenizer,
         pipeline,
     )
-except ImportError as e:
+except Exception as e:
     logger.error(f"Error importing module: {e}")
     raise SystemExit(e)
 

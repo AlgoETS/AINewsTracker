@@ -74,8 +74,3 @@ class NewsSeeder:
         data = await cls.get_news_data()
         news_list = cls.create_news(data["articles"])
         create_news(news_list)
-
-
-# Usage
-seeder = NewsSeeder()
-seeder.seed_news()

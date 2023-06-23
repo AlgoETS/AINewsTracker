@@ -66,8 +66,3 @@ class CompanySeeder:
         data = await cls.get_sp500_data()
         companies = cls.create_companies(data)
         create_companies(companies)
-
-
-# Usage
-seeder = CompanySeeder()
-seeder.seed_companies()

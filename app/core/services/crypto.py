@@ -30,7 +30,6 @@ class CryptoSymbol(Enum):
     LINKUSD = "LINKUSD"
     BTTUSD = "BTTUSD"
     BNBUSD = "BNBUSD"
-    # and so on...
 
 
 def get_historical_price_full_crypto(symbol: CryptoSymbol):
