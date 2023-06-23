@@ -7,7 +7,9 @@ from app.config import Settings
 from app.core.repo.article import create_article
 from app.models.article import Article
 from app.core.services.news import NewsFetcher
-import os
+from app.core.logging import Logger
+import logging
+logger = Logger(logging.INFO).get_logger()
 class NewsSeeder:
     settings = Settings()
     API_KEY = settings.FMP_API_KEY
@@ -37,7 +39,7 @@ class NewsSeeder:
                 writer.writerow(news_item.dict())
     
     @classmethod
-    async def get_news_data(cls, tickers: str = "", page: int = 0):
+    async def get_news_data(cls, tickers: str = "", page: int = 0 , limit: int = 5):
         tickers_param = f"tickers={tickers}&" if tickers else ""
         url = f"https://financialmodelingprep.com/api/v3/stock_news?{tickers_param}page={page}&apikey={cls.API_KEY}"
 
@@ -45,8 +47,10 @@ class NewsSeeder:
             try:
                 response = await client.get(url)
                 response.raise_for_status()  # Raise an exception if an HTTP error occurred
-                return {"articles": response.json()[:2]}
                 
+                news_data = response.json()[:limit]
+                return {"articles": news_data}
+            
             except httpx.RequestError as e:
                 print(f"Error making the request: {e}")
             except httpx.HTTPStatusError as e:
@@ -60,8 +64,9 @@ class NewsSeeder:
     @classmethod
     async def create_news(cls,data: List[dict]) -> List[Article]:
         articles = []
-        for article in data:
-            article_processed = await NewsFetcher().process_fmp_article(article)
+        for article_news in data:
+            logger.info(f"Processing article: {article_news.get('title')}")
+            article_processed = await NewsFetcher().process_fmp_article(article_news)
             articles.append(article_processed)
         return articles
 
