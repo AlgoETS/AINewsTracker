@@ -4,17 +4,19 @@ from typing import List
 
 import httpx
 
-from app.config import settings
+from app.config import Settings
 from app.core.repo.company import create_companies
 from app.models.company import Company
-
+import os
 
 class CompanySeeder:
+    
+    settings = Settings()
+
     API_KEY = settings.FMP_API_KEY
     SP500_URL = (
         f"https://financialmodelingprep.com/api/v3/sp500_constituent?apikey={API_KEY}"
     )
-
     @staticmethod
     def generate_csv(companies: List[Company], filename: str):
         with open(filename, "w", newline="") as csvfile:
@@ -43,15 +45,7 @@ class CompanySeeder:
     def create_companies(data: List[dict]) -> List[Company]:
         companies = []
         for company_data in data:
-            company = Company(
-                name=company_data.get("name"),
-                ticker=company_data.get("symbol"),
-                description=company_data.get("description"),
-                website=company_data.get("website"),
-                industry=company_data.get("industry"),
-                sector=company_data.get("sector"),
-                country=company_data.get("country"),
-            )
+            company = Company(**company_data)
             companies.append(company)
         return companies
 
@@ -65,9 +59,4 @@ class CompanySeeder:
     async def seed_companies(cls):
         data = await cls.get_sp500_data()
         companies = cls.create_companies(data)
-        create_companies(companies)
-
-
-# Usage
-seeder = CompanySeeder()
-seeder.seed_companies()
+        await create_companies(companies)

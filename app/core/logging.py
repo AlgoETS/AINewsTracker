@@ -51,3 +51,24 @@ class Logger:
     def set_level(self, log_level):
         level = logging.getLevelName(log_level)
         self._std_logger.setLevel(level)
+
+    def info(self, message:str):
+        self._logger.info(message)
+
+    def error(self, message:str):
+        self._logger.error(message)
+
+    def debug(self, message:str):
+        self._logger.debug(message)
+
+    def warning(self, message:str):
+        self._logger.warning(message)
+
+    def critical(self, message:str):
+        self._logger.critical(message)
+
+    def exception(self, message:str):
+        self._logger.exception(message)
+
+    def log(self, level, message:str):
+        self._logger.log(level, message)

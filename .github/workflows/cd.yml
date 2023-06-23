@@ -17,10 +17,6 @@ jobs:
       - name: Checkout (GitHub)
         uses: actions/checkout@v3
 
-      - name: Install system packages
-        run: |
-          sudo apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -47,9 +43,26 @@ jobs:
           poetry install
           poetry lock
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Deploy to production
-        if: github.ref == 'refs/tags/*'
-        run: |
-          # Add deployment steps here
-          # Example: Deploy to production server or package the application
+      - name: Build, push, and deploy Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+
+      - name: SSH and Docker Compose Up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SERVER_HOST }}
+          username: ${{ secrets.PRODUCTION_SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PRODUCTION_SERVER_PORT }}
+          script: |
+            docker pull user/app:latest
+            docker-compose up -d

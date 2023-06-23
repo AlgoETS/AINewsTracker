@@ -3,13 +3,12 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-
 class Company(BaseModel):
-    id: Optional[str]
+    symbol: str
     name: str
-    ticker: str
-    description: str
-    website: str
-    industry: str
     sector: str
-    country: str
+    subSector: str
+    headQuarter: str
+    dateFirstAdded: str
+    cik: str
+    founded: str

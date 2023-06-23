@@ -11,6 +11,8 @@ from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from prometheus_fastapi_instrumentator import Instrumentator
+from app.seed.companies import CompanySeeder
+from app.seed.news import NewsSeeder
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
@@ -21,14 +23,11 @@ from app.core.logging import Logger
 from app.core.telemetry.prometheus import check_prometheus_health
 
 # import all routers
-from app.routers import article, company, newsFeed, rss, users
+from app.routers import article, company, news, users
 
 startup_time = datetime.now()
 
-# Depending on the environment variable ENV_FILE, the respective .env file is loaded. If ENV_FILE is not set, the default .env file is loaded.
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../.env"
-
-settings = Settings(env_file)
+settings = Settings()
 
 logger = Logger(logging.INFO).get_logger()
 
@@ -65,9 +64,8 @@ app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
 # add all routers to app
 app.include_router(users.router)
 app.include_router(company.router)
-app.include_router(rss.router)
 app.include_router(article.router)
-app.include_router(newsFeed.router)
+app.include_router(news.router)
 
 # CORS
 app.add_middleware(
@@ -96,6 +94,10 @@ async def startup():
         logger.error("Redis server not available")
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
 
+    logger.info("Seeding database...")
+    #seed_companies = await CompanySeeder().seed_companies()
+    seed_news = await NewsSeeder().seed_news()
+    
 
 @app.on_event("shutdown")
 async def shutdown_event():

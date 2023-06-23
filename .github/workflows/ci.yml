@@ -17,7 +17,7 @@ jobs:
 
       - name: Install system packages
         run: |
-          sudo apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev
+          sudo apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev libcublas-dev-12-1
 
       - name: Set up Python
         uses: actions/setup-python@v2
