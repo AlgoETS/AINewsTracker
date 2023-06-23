@@ -4,12 +4,16 @@ from typing import List
 
 import httpx
 
-from app.config import settings
+from app.config import Settings
 from app.core.repo.company import create_companies
 from app.models.company import Company
-
+import os
 
 class CompanySeeder:
+    env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../.env"
+
+    settings = Settings(env_file)
+
     API_KEY = settings.FMP_API_KEY
     SP500_URL = (
         f"https://financialmodelingprep.com/api/v3/sp500_constituent?apikey={API_KEY}"

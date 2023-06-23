@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from app.core.logging import Logger
 
 
-logger = Logger(logging.Info).get_logger()
+logger = Logger(logging.INFO).get_logger()
 
 from app.core.repo.company import (
     create_company,

@@ -47,6 +47,7 @@ class Settings:
         self.REDIS_PORT = self.get_env_variable("REDIS_PORT", 6379)
 
         self.FMP_API_KEY = self.get_env_variable("FMP_API_KEY")
+        self.NEWS_API= self.get_env_variable("NEWS_API")
         self.BINANCE_API_KEY = self.get_env_variable("BINANCE_API_KEY")
         self.SECRET_KEY_BINANCE = self.get_env_variable("SECRET_KEY_BINANCE")
         self.IEX_TOKEN = self.get_env_variable("IEX_TOKEN")

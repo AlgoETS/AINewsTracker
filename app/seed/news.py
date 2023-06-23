@@ -4,12 +4,14 @@ import csv
 from datetime import datetime
 from typing import List
 
-from app.config import settings
+from app.config import Settings
 from app.core.repo.news import create_news
 from app.models.news import News
-
+import os
 class NewsSeeder:
-    API_KEY = settings.API_KEY
+    env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../.env"
+    settings = Settings(env_file)
+    API_KEY = settings.NEWS_API
     NEWS_URL = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={API_KEY}"
 
     @staticmethod
