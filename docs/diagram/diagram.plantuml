@@ -1,89 +1,52 @@
 @startuml
 package "app" {
-  package "core" {
-    package "database" {
-      class "db" as db
-    }
-    class "logging" as logging
-    package "repo" {
-      class "article" as article
-      class "company" as company
-      class "newsFeed" as newsFeed
-      class "users" as users
-    }
-    package "services" {
-      class "articles" as articles
-      class "company" as company_service
-      class "crypto" as crypto
-      class "finbert" as finbert
-      class "newsFeed" as newsFeed_service
-      package "rss" {
-        class "rss" as rss
-        class "source" as source
-      }
-      class "sentiments" as sentiments
-      class "strategy" as strategy
-    }
-    package "telemetry" {
-      class "prometheus" as prometheus
-    }
-  }
-  class "config" as config
-  class "models.Article" as Article
-  class "models.Comment" as Comment
-  class "models.Company" as Company
-  class "models.NewsFeed" as NewsFeed
-  class "models.UserDTO" as UserDTO
-  class "models.User" as User
-  class "main" as main
-}
+    class "config"
+    class "main"
 
-package "routers" {
-  class "article" as article_router
-  class "company" as company_router
-  class "newsFeed" as newsFeed_router
-  class "rss" as rss_router
-  class "users" as users_router
-}
+    package "core" {
+        package "repo" {
+            class "article"
+            class "company"
+            class "news"
+            class "user"
+        }
 
-package "seed" {
-  class "articles" as articles_seed
-  class "companies" as companies_seed
-  class "newsFeed" as newsFeed_seed
-  class "rss" as rss_seed
-  class "sources" as sources_seed
+        repo.article --> models.article
+        repo.company --> models.company
+        repo.news --> models.news
+        repo.user --> models.users
+
+        package "services" {
+            class "crypto"
+            class "metrics"
+            class "news"
+            class "user"
+        }
+
+        services.crypto --> trading.strategy
+        services.metrics --> trading.strategy
+        services.news --> models.news
+        services.user --> models.users
+
+        package "trading" {
+            class "strategy"
+        }
+    }
+
+    package "routers" {
+        class "article"
+        class "company"
+        class "news"
+        class "strategy"
+        class "users"
+    }
+
+    routers.article --> core.repo.article
+    routers.company --> core.repo.company
+    routers.news --> core.repo.news
+    routers.strategy --> core.trading.strategy
+    routers.users --> core.repo.user
 }
 
 main --> config
-main --> Article
-main --> Company
-main --> NewsFeed
-main --> UserDTO
-main --> User
-
-config --> logging
-
-Article --> Comment
-Company --> Article
-NewsFeed --> Article
-User --> UserDTO
-
-article_router --> article
-company_router --> company
-newsFeed_router --> newsFeed
-rss_router --> rss
-users_router --> users
-
-articles_seed --> Article
-companies_seed --> Company
-newsFeed_seed --> NewsFeed
-rss_seed --> rss
-sources_seed --> source
-
-db --> database
-articles --> Article
-company_service --> Company
-finbert --> sentiments
-newsFeed_service --> NewsFeed
-rss --> source
 @enduml

@@ -1,64 +1,39 @@
 @startuml
 package "app" {
-  package "core" {
-    package "database" {
-      class "db"
+    class "config"
+    class "main"
+    package "core" {
+        package "repo" {
+            class "article"
+            class "company"
+            class "news"
+            class "user"
+        }
+
+        package "services" {
+            class "crypto"
+            class "metrics"
+            class "news"
+            class "user"
+        }
+        package "trading" {
+            class "strategy"
+        }
     }
-    class "logging"
-    package "repo" {
-      class "article"
-      class "company"
-      class "newsFeed"
-      class "users"
+
+    package "models" {
+        class "article"
+        class "company"
+        class "news"
+        class "users"
     }
-    package "services" {
-      class "articles"
-      class "company_service"
-      class "finbert"
-      class "newsFeed_service"
-      package "rss" {
-        class "rss"
-        class "source"
-      }
-      class "sentiments"
-      class "strategy"
+
+    package "routers" {
+        class "article"
+        class "company"
+        class "news"
+        class "strategy"
+        class "users"
     }
-  }
-  class "config"
-  class "Article"
-  class "Comment"
-  class "Company"
-  class "NewsFeed"
-  class "UserDTO"
-  class "User"
-  class "main"
 }
-
-package "routers" {
-  class "article_router"
-  class "company_router"
-  class "newsFeed_router"
-  class "rss_router"
-  class "users_router"
-}
-
-package "seed" {
-  class "articles_seed"
-  class "companies_seed"
-  class "newsFeed_seed"
-  class "rss_seed"
-  class "sources_seed"
-}
-
-main --> config
-main --> Article
-main --> Company
-main --> NewsFeed
-main --> UserDTO
-main --> User
-
-Article --> Comment
-Company --> Article
-NewsFeed --> Article
-User --> UserDTO
 @enduml
