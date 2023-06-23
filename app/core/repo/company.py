@@ -14,9 +14,20 @@ async def create_company(company: Company):
     return result.inserted_id
 
 async def create_companies(companies: List[Company]):
-    companies = [dict(item.dict(), _id=str(ObjectId())) for item in companies]
-    result = await collection.insert_many(companies)
-    return result.inserted_ids
+    companies = [dict(item.dict()) for item in companies]
+    inserted_ids = []
+    for company in companies:
+        filter_query = {"symbol": company["symbol"]}  # filter condition for the upsert
+        update_query = {"$set": company}  # update operation
+
+        # upsert operation
+        result = await collection.update_one(filter_query, update_query, upsert=True)
+        
+        # If a new document was inserted, retrieve the inserted ID
+        if result.upserted_id:
+            inserted_ids.append(result.upserted_id)
+
+    return inserted_ids
 
 async def get_all_companies() -> List[Company]:
     companies = await collection.find().to_list(length=100)  # specify max limit here

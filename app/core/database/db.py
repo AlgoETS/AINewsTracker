@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import asyncio
 import os
-
+from pymongo import ASCENDING
 import aioredis
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -26,6 +26,9 @@ class MongoDB:
 
     def create_collections(self, collection_names):
         self._collections = {name: self._db[name] for name in collection_names}
+        
+        # Create index on "symbol" key for the "companies" collection
+        self._collections["companies"].create_index([("symbol", ASCENDING)])
 
     def get_collection(self, collection_name):
         return self._collections.get(collection_name, None)
