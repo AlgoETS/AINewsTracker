@@ -1,20 +1,6 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  ainewstracker:
-    container_name: ainewstracker
-    build: ..
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=redis
-    ports:
-      - 8000:8000
-    command: uvicorn app.main:app --host
-    networks:
-      dashboard:
-        ipv4_address: 172.16.0.1
-
   redis:
     image: redis:alpine
     container_name: redis
@@ -23,9 +9,18 @@ services:
       - REDIS_PASSWORD=redis
     ports:
       - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "version=latest"
+      - "description=Redis for caching"
+      - "type=caching"
     networks:
-      dashboard:
-        ipv4_address: 172.16.0.2
+      - dashboard
+      - monitoring
 
   mongo:
     image: mongo:latest
@@ -36,39 +31,54 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mongo
     ports:
       - 27017:27017
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "version=1.0.0"
+      - "description=MongoDB NoSQL main database"
+      - "type=database"
     networks:
-      dashboard:
-        ipv4_address: 172.16.0.3
+      - dashboard
+      - monitoring
+
+  web:
+    build: .
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis
+    ports:
+      - 8000:8000
+    command: uvicorn app.main:app --host 0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "version=0.1.2"
+      - "description=AINewsTracker"
+      - "type=api"
+    networks:
+      - dashboard
+      - monitoring
 
   prometheus:
     image: prom/prometheus:latest
-    restart: unless-stopped
     container_name: prometheus
     ports:
       - 9090:9090
     volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+      - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
-      dashboard:
-        ipv4_address: 172.16.0.4
-
-  grafana:
-    image: grafana/grafana:latest
-    restart: unless-stopped
-    container_name: grafana
+      - monitoring
     depends_on:
-      - prometheus
-    ports:
-      - 3000:3000
-    volumes:
-      - ./config/datasource.yml:/etc/grafana/provisioning/datasource.yml
-    env_file:
-      - ./config.monitoring
-    networks:
-      dashboard:
-        ipv4_address: 172.16.0.5
+      - web
 
 networks:
   dashboard:
@@ -78,3 +88,5 @@ networks:
       driver: default
       config:
         - subnet: 172.16.0.0/24
+  monitoring:
+    driver: bridge
