@@ -9,8 +9,7 @@ from app.core.repo.news import create_news
 from app.models.news import News
 import os
 class NewsSeeder:
-    env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../.env"
-    settings = Settings(env_file)
+    settings = Settings()
     API_KEY = settings.NEWS_API
     NEWS_URL = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={API_KEY}"
 

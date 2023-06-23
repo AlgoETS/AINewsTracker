@@ -9,6 +9,8 @@ class Settings:
     """Class to hold all environment settings."""
 
     _instance = None
+    default_env_file = ".env"  # Set the default env_file path here
+
 
     def __new__(cls, env_file: Optional[str] = None, env: Optional[dict] = None):
         if cls._instance is None:
@@ -22,11 +24,12 @@ class Settings:
         self.__initiated = True
         if env is None:
             self.env = os.environ
-            if env_file is not None:
-                load_dotenv(dotenv_path=env_file, verbose=True)
+            if env_file is None:
+                env_file = self.default_env_file  # Set the default env_file path if not provided
+            load_dotenv(dotenv_path=env_file, verbose=True)
         else:
             self.env = env
-
+            
         self.ENVIRONMENT = self.get_env_variable("ENVIRONMENT", "dev")
         self.HOST = self.get_env_variable("HOST", "0.0.0.0")
         self.PORT = int(self.get_env_variable("PORT", 8000))

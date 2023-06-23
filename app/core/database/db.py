@@ -7,9 +7,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.config import Settings
 
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../../.env"
 
-settings = Settings(env_file)
+settings = Settings()
 
 
 class MongoDB:

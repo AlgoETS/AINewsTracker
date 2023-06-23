@@ -27,10 +27,7 @@ from app.routers import article, company, news, users
 
 startup_time = datetime.now()
 
-# Depending on the environment variable ENV_FILE, the respective .env file is loaded. If ENV_FILE is not set, the default .env file is loaded.
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../.env"
-
-settings = Settings(env_file)
+settings = Settings()
 
 logger = Logger(logging.INFO).get_logger()
 
@@ -97,9 +94,9 @@ async def startup():
         logger.error("Redis server not available")
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
 
-    CompanySeeder().seed_companies()
-    NewsSeeder().seed_news()
-
+    logger.info("Seeding database...")
+    seed_companies = await CompanySeeder().seed_companies()
+    
 
 @app.on_event("shutdown")
 async def shutdown_event():

@@ -11,8 +11,8 @@ from app.core.database import MongoDB
 from app.config import Settings
 import os
 
-env_file = os.getenv("ENV_FILE") if "ENV_FILE" in os.environ else "../../../.env"
-settings = Settings(env_file)
+
+settings = Settings()
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
