@@ -46,7 +46,6 @@ beautifulsoup4 = "^4.12.2"
 feedparser = "^6.0.10"
 types-redis = "^4.5.5.2"
 spacy = "^3.5.3"
-mkdocs-build-plantuml-plugin = "^1.7.4"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"
@@ -64,6 +63,7 @@ flake8 = "^4.0.1"
 mkdocs = "^1.4.2"
 mkdocs-material = "^9.1.5"
 mkdocstrings = "^0.22.0"
+mkdocs-build-plantuml-plugin = "^1.7.4"
 
 [tool.poetry.scripts]
 start = "uvicorn app.main:app --reload"
