@@ -1,17 +1,34 @@
 site_name: AINewsTracker
+site_description: 'Leveraging AI to analyse financial news'
+site_author: 'AlgoETS Team(Antoine Boucher, Mohamed Ilias, Makhlouf Hennine)'
+site_url: 'https://algoets.github.io/AINewsTracker/'
+
+repo_name: 'algoets/AINewsTracker'
+repo_url: 'https://github.com/AlgoETS/AINewsTracker'
 
 theme:
   name: material
   palette:
-    primary: green
+    primary: light green
     accent: purple
+  media: "(prefers-color-scheme)"
+  toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
   font:
     text: Roboto
     code: Roboto Mono
+  favicon: 'img/favicon.ico'
+  logo: 'img/AINewsTracker_transparent.svg'
+  icon:
+    repo: fontawesome/brands/github
+    branch: fontawesome/solid/code-branch
 
 plugins:
   - mkdocstrings
-  - search
+  - search:
+      lang: en
+  - fontawesome
   - build_plantuml:
       render: 'server'
       server: 'http://www.plantuml.com/plantuml'
