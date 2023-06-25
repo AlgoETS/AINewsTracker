@@ -1,6 +1,6 @@
 @startuml
 title Fetch Feed Entries Flow
-
+!theme blueprint
 autonumber
 
 actor fetch_feed_entries

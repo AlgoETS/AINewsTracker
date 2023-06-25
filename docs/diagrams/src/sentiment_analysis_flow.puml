@@ -1,4 +1,7 @@
 @startuml
+title Sentiment Analysis
+!theme blueprint
+autonumber
 actor User
 
 User -> tokenizer: create AutoTokenizer

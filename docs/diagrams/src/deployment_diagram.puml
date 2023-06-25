@@ -1,0 +1,43 @@
+@startuml
+title Deployment Diagram for AINewsTracker
+!theme blueprint
+
+skinparam packageStyle rectangle
+
+node "GitHub" {
+    [Release] as GitHubRelease
+}
+
+node "GitHub Actions" as GHA {
+    [Setup & Build] as SetupBuild
+    [Upload Docker] as DockerUpload
+    [SSH] as SSH
+}
+
+node "Docker Hub" {
+    [AINewsTracker] as AINewsTracker
+}
+
+node "Production Server" as Prod {
+    package "Docker" {
+        node "Stack" as Stack {
+            rectangle "Redis" <<Caching>> as Redis
+            rectangle "MongoDB" <<Database>> as MongoDB
+            rectangle "AINewsTracker" <<Microservice>> as Web
+            rectangle "Prometheus" <<Monitoring>> as Prometheus
+            rectangle "Grafana" <<Visualization>> as Grafana
+        }
+    }
+}
+
+GitHubRelease --> SetupBuild : Trigger
+SetupBuild --> DockerUpload : Build and Push
+DockerUpload --> AINewsTracker : Push
+SetupBuild --> SSH : Trigger
+SSH --> Stack : Deploy
+Web --> AINewsTracker : Pull
+Web --> MongoDB : Connects
+Web --> Redis : Connects
+Prometheus --> Web : Monitors
+Grafana --> Prometheus : Visualizes data
+@enduml

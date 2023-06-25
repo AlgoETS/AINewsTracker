@@ -31,8 +31,6 @@ AINewsTracker is a sophisticated web application that backtests the influence of
 
 AINewsTracker aggregates financial news from multiple trusted sources globally and regionally. Below is a list of these sources:
 
-
-
 ## How to use
 
 1. Setup and activate the Python environment of your choice.
