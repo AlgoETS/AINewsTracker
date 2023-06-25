@@ -20,9 +20,6 @@ theme:
     code: Roboto Mono
   favicon: 'img/favicon.ico'
   logo: 'img/AINewsTracker_transparent.svg'
-  icon:
-    repo: fontawesome/brands/github
-    branch: fontawesome/solid/code-branch
 
 plugins:
   - mkdocstrings
