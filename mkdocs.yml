@@ -25,7 +25,6 @@ plugins:
   - mkdocstrings
   - search:
       lang: en
-  - fontawesome
   - build_plantuml:
       render: 'server'
       server: 'http://www.plantuml.com/plantuml'
