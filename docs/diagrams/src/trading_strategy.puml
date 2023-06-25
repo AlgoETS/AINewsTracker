@@ -1,4 +1,7 @@
 @startuml
+title Trading Strategy
+!theme blueprint
+autonumber
 actor User
 
 User -> execute_trading_strategy: Call execute_trading_strategy()

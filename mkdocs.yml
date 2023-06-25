@@ -1,0 +1,35 @@
+site_name: AINewsTracker
+
+theme:
+  name: material
+  palette:
+    primary: green
+    accent: purple
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+plugins:
+  - mkdocstrings
+  - search
+  - build_plantuml:
+      render: 'server'
+      server: 'http://www.plantuml.com/plantuml'
+      output_format: 'svg'
+      diagram_root: 'docs/diagrams'
+      output_folder: 'out'
+      input_folder: 'src'
+      theme_enabled: true
+
+
+nav:
+  - Home: mkdocs/index.md
+  - About: mkdocs/about.md
+  - Getting Started: mkdocs/getting-started.md
+  - Explanation: mkdocs/explanation.md
+  - Examples: mkdocs/example.md
+  - API Reference: mkdocs/api.md
+  - Diagram: mkdocs/diagrams.md
+  - Reference: mkdocs/refences.md
+  - Contacts: mkdocs/contact.md
+  - Tutorials: mkdocs/tutorials.md

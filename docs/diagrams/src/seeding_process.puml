@@ -1,6 +1,6 @@
 @startuml
 title Seeding Process
-
+!theme blueprint
 autonumber
 
 actor Seeder

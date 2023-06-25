@@ -1,8 +1,9 @@
 @startuml
+title "Package Diagram"
+!theme blueprint
 package "app" {
     class "config"
     class "main"
-
     package "core" {
         package "repo" {
             class "article"
@@ -11,26 +12,22 @@ package "app" {
             class "user"
         }
 
-        repo.article --> models.article
-        repo.company --> models.company
-        repo.news --> models.news
-        repo.user --> models.users
-
         package "services" {
             class "crypto"
             class "metrics"
             class "news"
             class "user"
         }
-
-        services.crypto --> trading.strategy
-        services.metrics --> trading.strategy
-        services.news --> models.news
-        services.user --> models.users
-
         package "trading" {
             class "strategy"
         }
+    }
+
+    package "models" {
+        class "article"
+        class "company"
+        class "news"
+        class "users"
     }
 
     package "routers" {
@@ -40,13 +37,5 @@ package "app" {
         class "strategy"
         class "users"
     }
-
-    routers.article --> core.repo.article
-    routers.company --> core.repo.company
-    routers.news --> core.repo.news
-    routers.strategy --> core.trading.strategy
-    routers.users --> core.repo.user
 }
-
-main --> config
 @enduml

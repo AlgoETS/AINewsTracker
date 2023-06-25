@@ -1,5 +1,6 @@
 @startuml
 title Article Processing Flow
+!theme blueprint
 
 start
 
