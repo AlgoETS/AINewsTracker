@@ -1,0 +1,41 @@
+@startuml
+title "Package Diagram"
+!theme blueprint
+package "app" {
+    class "config"
+    class "main"
+    package "core" {
+        package "repo" {
+            class "article"
+            class "company"
+            class "news"
+            class "user"
+        }
+
+        package "services" {
+            class "crypto"
+            class "metrics"
+            class "news"
+            class "user"
+        }
+        package "trading" {
+            class "strategy"
+        }
+    }
+
+    package "models" {
+        class "article"
+        class "company"
+        class "news"
+        class "users"
+    }
+
+    package "routers" {
+        class "article"
+        class "company"
+        class "news"
+        class "strategy"
+        class "users"
+    }
+}
+@enduml

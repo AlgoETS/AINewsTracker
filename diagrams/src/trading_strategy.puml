@@ -1,0 +1,47 @@
+@startuml
+title Trading Strategy
+!theme blueprint
+autonumber
+actor User
+
+User -> execute_trading_strategy: Call execute_trading_strategy()
+
+activate execute_trading_strategy
+
+User -> fetch_news: Call fetch_news(company)
+fetch_news -> fetch_news: Fetch news articles for the company
+fetch_news --> execute_trading_strategy: Return news articles
+
+activate fetch_news
+
+loop for each article in news_articles
+  execute_trading_strategy -> analyze_sentiment: Call analyze_sentiment(article)
+  analyze_sentiment -> analyze_sentiment: Analyze sentiment score for the article
+  analyze_sentiment --> execute_trading_strategy: Return sentiment score
+
+  activate analyze_sentiment
+
+  alt sentiment_score > sentiment_threshold
+    execute_trading_strategy -> execute_trading_strategy: Increment positive_count
+  else sentiment_score < -sentiment_threshold
+    execute_trading_strategy -> execute_trading_strategy: Increment negative_count
+  end
+
+  execute_trading_strategy -> execute_trading_strategy: Increment total_count
+
+  deactivate analyze_sentiment
+end
+
+execute_trading_strategy -> execute_trading_strategy: Compute positive_ratio, negative_ratio
+
+alt positive_ratio > buy_sell_percentage
+  execute_trading_strategy -> buy_stock: Call buy_stock(company)
+else negative_ratio > buy_sell_percentage
+  execute_trading_strategy -> sell_stock: Call sell_stock(company)
+end
+
+deactivate fetch_news
+deactivate execute_trading_strategy
+
+execute_trading_strategy --> User: Trading strategy executed
+@enduml

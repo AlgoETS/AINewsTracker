@@ -1,0 +1,28 @@
+@startuml
+title Article Processing Flow
+!theme blueprint
+
+start
+
+:analyze_sentiment(content);
+note right: Obtain sentiment of the content
+:most_sentiment = max(sentiment);
+note right: Determine the sentiment with the highest score
+:most_sentiment_score = sentiment[most_sentiment];
+note right: Determine the score of the most dominant sentiment
+
+:detect_ticker(content);
+note right: Detect tickers in the content
+
+:classify_topic(content);
+note right: Classify topics in the content
+
+:summarize_text(content);
+note right: Summarize the content
+
+:Create Article instance;
+note right: Create an instance of the Article with the obtained data
+
+stop
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+title Seeding Process
+!theme blueprint
+autonumber
+
+actor Seeder
+participant Client as Client
+participant Repo as Database
+database CSV
+
+Seeder -> Client: Get data from API
+Client --> Seeder: API Response
+Seeder -> Seeder: Process data into objects
+Seeder -> Database: Store objects in database
+Database --> Seeder: Confirmation of storage
+
+note over Seeder: Optionally create CSV file
+Seeder -> CSV: Write objects to CSV file
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+title Sentiment Analysis
+!theme blueprint
+autonumber
+actor User
+
+User -> tokenizer: create AutoTokenizer
+User -> model: create AutoModelForSequenceClassification
+
+User -> tokenizer: encode_plus(text)
+tokenizer -> tokenizer: process text
+tokenizer -> torch: tokenize text
+
+User -> model: predict sentiment
+model -> tokenizer: process inputs
+tokenizer -> tokenizer: encode_plus(inputs)
+tokenizer -> torch: tokenize inputs
+tokenizer --> model: input_ids, token_type_ids, attention_mask
+torch -> model: Perform prediction
+model -> torch.softmax: Compute softmax probabilities
+torch.softmax -> model: Return probabilities
+model --> User: Sentiment analysis results
+@enduml

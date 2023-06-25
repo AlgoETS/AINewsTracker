@@ -1,0 +1,36 @@
+@startuml
+title Fetch Feed Entries Flow
+!theme blueprint
+autonumber
+
+actor fetch_feed_entries
+participant client
+participant parsed_feed
+participant Article
+participant database
+
+fetch_feed_entries -> client: get(source.url)
+note right: Fetch RSS feed
+client --> fetch_feed_entries: response
+
+fetch_feed_entries -> parsed_feed: parse(feed)
+note right: Parse RSS feed
+parsed_feed --> fetch_feed_entries: entries
+
+group For each entry in entries
+    fetch_feed_entries -> fetch_feed_entries: get_entry_text(entry.link)
+    note right: Get entry content
+    fetch_feed_entries --> fetch_feed_entries: text_content
+
+    fetch_feed_entries -> fetch_feed_entries: process_article(entry, text_content)
+    note right: Process article
+    fetch_feed_entries --> fetch_feed_entries: article
+
+    fetch_feed_entries -> fetch_feed_entries: append(article)
+    note right: Append article to list
+end
+
+fetch_feed_entries -> database: create_articles(articles)
+note right: Save articles in database
+database --> fetch_feed_entries: Save confirmation
+@enduml
