@@ -12,7 +12,7 @@
         <meta name="author" content="AlgoETS Team(Antoine Boucher, Mohamed Ilias, Makhlouf Hennine)">
       
       
-        <link rel="canonical" href="https://algoets.github.io/AINewsTracker/example/">
+        <link rel="canonical" href="https://algoets.github.io/AINewsTracker/overview/">
       
       
         <link rel="prev" href="../explanation/">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Examples - AINewsTracker</title>
+        <title>Overview - AINewsTracker</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#example" class="md-skip">
+        <a href="#ainewstracker-an-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Examples
+              Overview
             
           </span>
         </div>
@@ -289,9 +289,136 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
-        Examples
+        Overview
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-news-source" class="md-nav__link">
+    1. News Source
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-article" class="md-nav__link">
+    2. Article
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-comment" class="md-nav__link">
+    3. Comment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-company" class="md-nav__link">
+    4. Company
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-relations-diagram" class="md-nav__link">
+    Data Relations Diagram
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nlp-operations" class="md-nav__link">
+    NLP Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="NLP Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sentiment-analysis" class="md-nav__link">
+    Sentiment Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticker-detection" class="md-nav__link">
+    Ticker Detection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-extraction" class="md-nav__link">
+    Summary Extraction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#topic-classification" class="md-nav__link">
+    Topic Classification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    Note
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -392,6 +519,117 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-news-source" class="md-nav__link">
+    1. News Source
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-article" class="md-nav__link">
+    2. Article
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-comment" class="md-nav__link">
+    3. Comment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-company" class="md-nav__link">
+    4. Company
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-relations-diagram" class="md-nav__link">
+    Data Relations Diagram
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nlp-operations" class="md-nav__link">
+    NLP Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="NLP Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sentiment-analysis" class="md-nav__link">
+    Sentiment Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticker-detection" class="md-nav__link">
+    Ticker Detection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-extraction" class="md-nav__link">
+    Summary Extraction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#topic-classification" class="md-nav__link">
+    Topic Classification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    Note
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -408,10 +646,13 @@
   
 
 
-<h1 id="example">Example</h1>
-<p>In AINewsTracker, we manage various types of data including news sources, articles, comments, and company information. Here's a simplified outline of how these various data types might interact:</p>
-<pre><code class="language-plaintext"># Example of a News Source
-news = {
+<h1 id="ainewstracker-an-overview">AINewsTracker: An Overview</h1>
+<h2 id="introduction">Introduction</h2>
+<p>AINewsTracker is a platform that manages a wide range of data types such as news sources, articles, comments, and company information. These data are interconnected, providing rich context and insights. Below is a simplified overview of these data types and how they interact.</p>
+<h2 id="data-types">Data Types</h2>
+<h3 id="1-news-source">1. News Source</h3>
+<p>This is an example of how a news source might be represented.</p>
+<pre><code class="language-json">{
     'source_name': 'The AI Journal',
     'topics': ['AI', 'ML'],
     'country': 'US',
@@ -421,55 +662,116 @@ news = {
     'link': 'https://theaijournal.com/latest-news',
     'last_update': '2023-06-24',
 }
-
-# Example of an Article linked to a News Source
-article = {
+</code></pre>
+<h3 id="2-article">2. Article</h3>
+<p>Articles are linked to their respective news source. The example below shows a representation of an article that originates from the news source example above.</p>
+<pre><code class="language-json">{
     'title': 'Latest AI Advancements',
     'url': 'https://theaijournal.com/latest-ai-advancements',
     'publishedDate': '2023-06-24',
     'text': 'This article discusses the latest advancements in AI...',
-    'source_name': news['source_name'],
+    'source_name': 'The AI Journal',  // Derived from the `source_name` field in the news source.
     'sentiment': 'Positive',
     'author': 'John Doe',
     'company': 'Google Inc.',
 }
-
-# Example of a Comment linked to an Article
-comment = {
+</code></pre>
+<h3 id="3-comment">3. Comment</h3>
+<p>Comments are linked to their respective articles. Here's an example:</p>
+<pre><code class="language-json">{
     'content': 'Great article!',
     'date': '2023-06-24',
-    'article_id': article['url'],
+    'article_id': 'https://theaijournal.com/latest-ai-advancements',  // Linked to the article via the `url` field.
 }
-
-# Example of a Company linked to an Article
-company = {
+</code></pre>
+<h3 id="4-company">4. Company</h3>
+<p>Companies are linked to articles that mention them. Here's an example:</p>
+<pre><code class="language-json">{
     'symbol': 'GOOG',
     'name': 'Google Inc.',
     'sector': 'Technology',
 }
 </code></pre>
-<p>In this simplified example:</p>
-<ul>
-<li>A <code>news</code> dictionary represents a news source.</li>
-<li>An <code>article</code> dictionary represents an article, which is linked to the <code>news</code> source from which it originated. It's also linked to a <code>company</code> through the company's name.</li>
-<li>A <code>comment</code> dictionary represents a comment made on the article. It is linked to the <code>article</code> through the article's URL.</li>
-<li>A <code>company</code> dictionary represents a company. It is linked to the <code>article</code> through the article's company name field.</li>
-</ul>
-<p>These dictionaries demonstrate how different data types could be structured and linked within AINewsTracker.</p>
-<p>Please note: This is a simplified example for illustrative purposes. Actual data structures might be more complex and contain more fields. For detailed data structure definitions, please refer to the respective Pydantic model classes (<code>News</code>, <code>Article</code>, <code>Comment</code>, <code>Company</code>) in the codebase.</p>
-<h1 id="nlp-sentiment-analysis-for-an-article">NLP Sentiment Analysis for an Article</h1>
-<p>article_sentiment_analysis = {
-    'title': article['title'],
-    'url': article['url'],
-    'sentiment_score': 0.8,  # The sentiment score of the article text. Positive numbers indicate positive sentiment, negative numbers indicate negative sentiment, and zero indicates neutral sentiment.
-    'sentiment': 'Positive',  # The sentiment of the article, determined based on the sentiment score.
-}</p>
-<h1 id="example-of-nlp-ticker-detection-for-an-article">Example of NLP Ticker Detection for an Article</h1>
-<p>article_ticker_detection = {
-    'title': article['title'],
-    'url': article['url'],
-    'tickers': ['GOOG'],  # The ticker symbols found in the article text.
-}</p>
+<h2 id="data-relations-diagram">Data Relations Diagram</h2>
+<p>Here's a simple PlantUML diagram illustrating the relationships between these entities:</p>
+<pre><code class="language-plantuml">@startuml
+entity &quot;News&quot; as news {
+  source_name: string
+  topics: list
+  country: string
+  language: string
+  type: string
+  source_url: url
+  link: url
+  last_update: date
+}
+
+entity &quot;Article&quot; as article {
+  title: string
+  url: url
+  publishedDate: date
+  text: text
+  source_name: ref
+  sentiment: string
+  author: string
+  company: ref
+}
+
+entity &quot;Comment&quot; as comment {
+  content: text
+  date: date
+  article_id: ref
+}
+
+entity &quot;Company&quot; as company {
+  symbol: string
+  name: string
+  sector: string
+}
+
+news -- article : produces &gt;
+article -- comment : has &gt;
+article -- company : mentions &gt;
+@enduml
+</code></pre>
+<h2 id="nlp-operations">NLP Operations</h2>
+<p>Using Natural Language Processing, AINewsTracker can perform operations such as sentiment analysis and ticker detection on articles. Here are examples of how these operations might be represented:</p>
+<h3 id="sentiment-analysis">Sentiment Analysis</h3>
+<pre><code class="language-json">{
+    'title': 'Latest AI Advancements',
+    'url': 'https://theaijournal.com/latest-ai-advancements',
+    'sentiment_score': 0.8,  // The sentiment score of the article text.
+    'sentiment': 'Positive',  // The sentiment of the article, determined based on the sentiment score.
+}
+</code></pre>
+<h3 id="ticker-detection">Ticker Detection</h3>
+<pre><code class="language-json">{
+    'title': 'Latest AI Advancements',
+    'url': 'https://theaijournal.com/latest-ai-advancements',
+    'tickers': ['GOOG'],  // The ticker symbols found in the article text.
+}
+</code></pre>
+<h2 id="summary-extraction">Summary Extraction</h2>
+<p>Another essential feature offered by AINewsTracker is the capability to extract summary information from an article using NLP techniques. This can be beneficial for users who need to understand the gist of an article quickly. Here's an example of how the summary extraction for an article might be represented:</p>
+<pre><code class="language-json">{
+    'title': 'Latest AI Advancements',
+    'url': 'https://theaijournal.com/latest-ai-advancements',
+    'summary': 'This article discusses the latest advancements in AI, highlighting major breakthroughs made by Google Inc...',
+}
+</code></pre>
+<p>In this example, the 'summary' field contains a concise overview of the article's content, providing quick insight into the article's main points. This brief overview is generated using advanced NLP techniques that identify and summarize the most critical information from the article text.</p>
+<p>Please note that the quality and accuracy of the summary can depend on various factors, including the complexity of the article's content and the efficiency of the NLP algorithm used for summary extraction.</p>
+<h2 id="topic-classification">Topic Classification</h2>
+<p>Topic classification is a crucial NLP operation where we determine the topics that an article discusses. This can help categorize the articles for easier access and understand the main areas covered in the text. Here's an example of how the topic classification for an article might be represented:</p>
+<pre><code class="language-json">{
+    'title': 'Latest AI Advancements',
+    'url': 'https://theaijournal.com/latest-ai-advancements',
+    'topics': ['AI', 'Machine Learning', 'Google'],  // The main topics found in the article text.
+}
+</code></pre>
+<p>In this example, the 'topics' field contains a list of the main subjects that the article discusses. The topic classification is conducted using sophisticated NLP techniques, which examine the text and identify key themes.</p>
+<h2 id="note">Note</h2>
+<p>These examples provide a basic understanding of the data types and operations in AINewsTracker. The actual data structures may be more complex and contain additional fields. For detailed definitions, please refer to the Pydantic model classes (<code>News</code>, <code>Article</code>, <code>Comment</code>, <code>Company</code>) in the AINewsTracker codebase.</p>
 
 
 

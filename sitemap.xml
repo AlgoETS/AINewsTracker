@@ -26,17 +26,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://algoets.github.io/AINewsTracker/example/</loc>
-         <lastmod>2023-06-25</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://algoets.github.io/AINewsTracker/explanation/</loc>
          <lastmod>2023-06-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://algoets.github.io/AINewsTracker/getting-started/</loc>
+         <lastmod>2023-06-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://algoets.github.io/AINewsTracker/overview/</loc>
          <lastmod>2023-06-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
