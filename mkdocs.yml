@@ -23,13 +23,13 @@ plugins:
 
 
 nav:
-  - Home: mkdocs/index.md
-  - About: mkdocs/about.md
-  - Getting Started: mkdocs/getting-started.md
-  - Explanation: mkdocs/explanation.md
-  - Examples: mkdocs/example.md
-  - API Reference: mkdocs/api.md
-  - Diagram: mkdocs/diagrams.md
-  - Reference: mkdocs/refences.md
-  - Contacts: mkdocs/contact.md
-  - Tutorials: mkdocs/tutorials.md
+  - Home: index.md
+  - About: about.md
+  - Getting Started: getting-started.md
+  - Explanation: explanation.md
+  - Examples: example.md
+  - API Reference: api.md
+  - Diagram: diagrams.md
+  - Reference: refences.md
+  - Contacts: contact.md
+  - Tutorials: tutorials.md
