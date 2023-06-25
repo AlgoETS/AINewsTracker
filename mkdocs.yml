@@ -40,7 +40,7 @@ nav:
   - About: about.md
   - Getting Started: getting-started.md
   - Explanation: explanation.md
-  - Examples: example.md
+  - Overview: overview.md
   - API Reference: api.md
   - Diagram: diagrams.md
   - Reference: refences.md

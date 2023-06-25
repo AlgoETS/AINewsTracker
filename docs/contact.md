@@ -20,12 +20,10 @@ You can connect with the developers on LinkedIn:
 
 ## Algorithmic Engineering and Data Science Group (algoETS)
 
-You can also reach out to us through our group, algoETS, which is based at the École de technologie supérieure in Montreal, Canada:
+You can also reach out to us through our group, AlgoETS, which is based at the École de technologie supérieure in Montreal, Canada:
 
 - AlgoETS: [http://algoets.etsmtl.ca](http://algoets.etsmtl.ca)
 - LinkedIn: [https://linkedin.com/company/algoets](https://linkedin.com/company/algoets)
-
-We look forward to hearing from you!
 
 # Support
 
@@ -35,7 +33,10 @@ AlgoETS
     - Go to the http://algoets.etsmtl.ca and make a donation or a sponsorship
 
 Antoine Boucher
-    - Buy us a coffee: [![Buymeacoffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/antoineboucher)
-    - Make a secure donation through Stripe: [![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://buy.stripe.com/eVaaEYfLvaTp8jm5kl)
+
+- Buy us a coffee: [![Buymeacoffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/antoineboucher)
+
+- Make a secure donation through Stripe: [![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://buy.stripe.com/eVaaEYfLvaTp8jm5kl)
+
 
 Your contributions are greatly appreciated and help us continue developing and improving the AINewsTracker project. Thank you!
