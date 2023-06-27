@@ -120,10 +120,14 @@ The documentation of the API is available at the following URL: http://localhost
 - [ ] Add an endpoint for users to subscribe to specific companies or news tags
 - [ ] Implement a system for sending daily/weekly email updates for subscribed users
 - [ ] Add multi-language support for international users
-- [ ] Create a mechanism to rate-limit requests to protect the API from abuse
-- [ ] Optimize database queries to improve performance
+- [X] Create a mechanism to rate-limit requests to protect the API from abuse
+- [X] Optimize database queries to improve performance
 - [ ] Implement a backup system for the database
 - [X] Write detailed API documentation for end-users and developers
 - [X] Refactor and clean up the codebase for better maintainability
 - [ ] Implement real-time updates using WebSockets
 - [X] Add analytics features for tracking user behavior and system performance
+- [ ] Deployment and server provisioning process
+- [ ] Plan and implement a regular backup strategy
+- [X] Set up a monitoring system for server resources (CPU, memory, disk space, etc.).
+- [X] Set up a Continuous Integration (CI) and Continuous Deployment (CD) pipeline.

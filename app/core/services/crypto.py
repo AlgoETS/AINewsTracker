@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 from enum import Enum
 from typing import List
-from app.config import BASE_URL_FMP, FMP_API_KEY
+from app.config import Settings
 from app.core.services import make_api_request
+
+
+settings = Settings()
+
+FMP_API_KEY = settings.FMP_API_KEY
+BASE_URL_FMP = settings.BASE_URL_FMP
 
 class CryptoSymbol(Enum):
     BTCUSD = "BTCUSD"

@@ -29,7 +29,7 @@ class Settings:
             load_dotenv(dotenv_path=env_file, verbose=True)
         else:
             self.env = env
-            
+
         self.ENVIRONMENT = self.get_env_variable("ENVIRONMENT", "dev")
         self.HOST = self.get_env_variable("HOST", "0.0.0.0")
         self.PORT = int(self.get_env_variable("PORT", 8000))
@@ -48,6 +48,8 @@ class Settings:
         self.REDIS_HOST = self.get_env_variable("REDIS_HOST", "localhost")
         self.REDIS_PASSWORD = self.get_env_variable("REDIS_PASSWORD", "")
         self.REDIS_PORT = self.get_env_variable("REDIS_PORT", 6379)
+        self.REDIS_DB = self.get_env_variable("REDIS_DB", "AlgoETS-free-db")
+        self.REDIS_USERNAME = self.get_env_variable("REDIS_USERNAME", "")
 
         self.FMP_API_KEY = self.get_env_variable("FMP_API_KEY")
         self.NEWS_API= self.get_env_variable("NEWS_API")

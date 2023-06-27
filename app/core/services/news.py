@@ -146,14 +146,14 @@ class NewsFetcher:
         # Get the text content
         text = soup.get_text(separator=" ")
         return text.strip() if text else None
-    
+
     def extract_source(self,url: str) -> str:
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
         if domain.startswith("www."):
             domain = domain[4:]  # Remove "www." from the domain
         return domain
-    
+
     async def process_fmp_article(self, article_dict: dict):
         content = article_dict.get("text")
         sentiment = self.text_metrics.analyze_sentiment(content)
