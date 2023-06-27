@@ -11,6 +11,7 @@ from app.core.logging import Logger
 import logging
 logger = Logger(logging.INFO).get_logger()
 
+# https://finnhub.io/docs/api/websocket-news
 
 class NewsSeeder:
     settings = Settings()

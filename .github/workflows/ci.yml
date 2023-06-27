@@ -36,13 +36,18 @@ jobs:
       - name: Run poetry
         uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: "1.5.0"
+          poetry-version: "1.5.1"
+
+      - uses: Jimver/cuda-toolkit@v0.2.10
+        id: cuda-toolkit
+        with:
+            cuda: '11.4.1'
 
       - name: Install dependencies
         run: |
-          pip install genbadge defusedxml
           poetry install
           poetry lock
+          poetry spacy download en
 
       - name: Run linting
         run: poetry run black app
@@ -59,6 +64,7 @@ jobs:
 
       - name: Run tests
         run: |
+          pip install genbadge defusedxml
           export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
           poetry run coverage run -m pytest
           poetry run coverage report -m
