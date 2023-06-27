@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 import asyncio
+import logging
 import os
 from pymongo import ASCENDING
 import aioredis
+import contextlib
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.config import Settings
+from app.core.logging import Logger
 
 
 settings = Settings()
-
+logger = Logger(log_level=logging.DEBUG).get_logger()
 
 class MongoDB:
     _instance = None
@@ -26,10 +29,11 @@ class MongoDB:
 
     def create_collections(self, collection_names):
         self._collections = {name: self._db[name] for name in collection_names}
-        
+
         # Create index on "symbol" key for the "companies" collection
         self._collections["companies"].create_index([("symbol", ASCENDING)])
         self._collections["articles"].create_index([("url", ASCENDING)])
+
     def get_collection(self, collection_name):
         return self._collections.get(collection_name, None)
 
@@ -55,22 +59,25 @@ class RedisDB:
     def __new__(cls, host="localhost", port=6379, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._instance._connection = None
+        return cls._instance
+
+    async def connect(self):
+        if self._connection is None:
             try:
-                loop = asyncio.get_event_loop()
-                cls._instance._connection = loop.run_until_complete(
-                    aioredis.create_redis_pool(
-                        f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}',
-                        password=settings.REDIS_PASSWORD,
-                        loop=loop
-                    )
+                self._connection = await aioredis.create_redis_pool(
+                    f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}',
+                    username=settings.REDIS_USERNAME,
+                    password=settings.REDIS_PASSWORD,
+                    db=settings.REDIS_DB,
                 )
                 print("Connected to Redis")
             except Exception:
                 print("Redis server not available")
-                cls._instance._connection = None
-        return cls._instance
 
     async def check_connection(self):
+        if self._connection is None:
+            return False
         try:
             pong = await self._connection.ping()
             return pong == "PONG"
@@ -82,4 +89,6 @@ class RedisDB:
         return self._connection.info() if self._connection else None
 
     def close(self):
-        self._connection.close()
+        with contextlib.suppress(Exception):
+            self._connection.close()
+

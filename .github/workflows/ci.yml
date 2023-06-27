@@ -47,7 +47,7 @@ jobs:
         run: |
           poetry install
           poetry lock
-          poetry run spacy download en
+          poetry run spacy download en_core_web_sm
 
       - name: Run linting
         run: poetry run black app

@@ -9,8 +9,8 @@ logger = Logger(logging.INFO).get_logger()
 
 try:
     import torch
-    os.environ["CUDA_VISIBLE_DEVICES"]=""
-    torch.set_default_tensor_type(torch.FloatTensor)
+    # os.environ["CUDA_VISIBLE_DEVICES"]=""
+    # torch.set_default_tensor_type(torch.FloatTensor)
 except ImportError as e:
     logger.warning(f"Error importing torch: {e}")
 

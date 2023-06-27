@@ -48,6 +48,7 @@ class NewsSeeder:
 
         async with httpx.AsyncClient() as client:
             try:
+                logger.info(f"Fetching news from {url}")
                 response = await client.get(url)
                 response.raise_for_status()  # Raise an exception if an HTTP error occurred
 
