@@ -96,7 +96,7 @@ async def startup():
 
     logger.info("Seeding database...")
     #seed_companies = await CompanySeeder().seed_companies()
-    #seed_news = await NewsSeeder().seed_news()
+    seed_news = await NewsSeeder().seed_news()
     
 
 @app.on_event("shutdown")
