@@ -46,6 +46,7 @@ beautifulsoup4 = "^4.12.2"
 feedparser = "^6.0.10"
 types-redis = "^4.5.5.2"
 spacy = "^3.5.3"
+finnhub-python = "^2.4.18"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.0.4"

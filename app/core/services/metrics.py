@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from typing import Dict, Any
 import logging
 
@@ -7,8 +8,18 @@ from app.core.logging import Logger
 logger = Logger(logging.INFO).get_logger()
 
 try:
-    import spacy
     import torch
+    # os.environ["CUDA_VISIBLE_DEVICES"]=""
+    # torch.set_default_tensor_type(torch.FloatTensor)
+except ImportError as e:
+    logger.warning(f"Error importing torch: {e}")
+
+try:
+    import spacy
+except ImportError as e:
+    logger.warning(f"Error importing spacy: {e}")
+
+try:
     from transformers import (
         AutoModelForSeq2SeqLM,
         AutoModelForTokenClassification,
@@ -16,12 +27,14 @@ try:
         AutoTokenizer,
         pipeline,
     )
-except Exception as e:
-    logger.error(f"Error importing module: {e}")
-    raise SystemExit(e)
+except ImportError as e:
+    logger.warning(f"Error importing transformers: {e}")
 
-# Use CUDA if it's available
-device = "cuda" if torch.cuda.is_available() else "cpu"
+try:
+    # Use CUDA if it's available
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+except Exception as e:
+    logger.warning(f"Error initializing CUDA: {e}")
 
 def requires_cuda(func):
     """Decorator for methods that require CUDA."""
@@ -41,24 +54,32 @@ class TextMetrics:
         try:
             # Load Spacy model for topic classification
             self.nlp = spacy.load("en_core_web_sm")
+        except Exception as e:
+            logger.error(f"Error initializing Spacy: {e}")
 
+        try:
             # Load model for ticker detection
             self.ticker_tokenizer = AutoTokenizer.from_pretrained("Jean-Baptiste/roberta-ticker")
             self.ticker_model = AutoModelForTokenClassification.from_pretrained("Jean-Baptiste/roberta-ticker").to(device)
             self.ticker_pipeline = pipeline("ner", model=self.ticker_model, tokenizer=self.ticker_tokenizer, aggregation_strategy="simple")
+        except Exception as e:
+            logger.error(f"Error initializing Ticker Detection Model: {e}")
 
+        try:
             # Load model for text summarization
             self.summarizer_tokenizer = AutoTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
             self.summarizer_model = AutoModelForSeq2SeqLM.from_pretrained("sshleifer/distilbart-cnn-12-6").to(device)
             self.summarizer = pipeline("summarization", model=self.summarizer_model, tokenizer=self.summarizer_tokenizer)
+        except Exception as e:
+            logger.error(f"Error initializing Text Summarization Model: {e}")
 
+        try:
             # Load model for sentiment analysis
             self.sentiment_tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
             self.sentiment_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert").to(device)
-
         except Exception as e:
-            logger.error(f"Error initializing TextMetrics: {e}")
-            raise SystemExit(e) from e
+            logger.error(f"Error initializing Sentiment Analysis Model: {e}")
+
 
     def classify_topic(self, text: str) -> Dict[str, Any]:
         doc = self.nlp(text)
