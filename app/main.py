@@ -23,7 +23,7 @@ from app.core.logging import Logger
 from app.core.telemetry.prometheus import check_prometheus_health
 
 # import all routers
-from app.routers import article, company, news, users
+from app.routers import article, company, news, users, discord
 
 startup_time = datetime.now()
 
@@ -66,7 +66,7 @@ app.include_router(users.router)
 app.include_router(company.router)
 app.include_router(article.router)
 app.include_router(news.router)
-
+app.include_router(discord.router)
 # CORS
 app.add_middleware(
     CORSMiddleware,
@@ -95,10 +95,9 @@ async def startup():
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
 
     logger.info("Seeding database...")
-    seed_companies = await CompanySeeder().seed_companies()
-    seed_news = await NewsSeeder().seed_news()
-    logger.info(f"Seeded {seed_companies} companies and {seed_news} news articles")
-
+    #seed_companies = await CompanySeeder().seed_companies()
+    #seed_news = await NewsSeeder().seed_news()
+    #logger.info(f"Seeded {seed_companies} companies and {seed_news} news articles")
 
 @app.on_event("shutdown")
 async def shutdown_event():

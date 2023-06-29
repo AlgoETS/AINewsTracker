@@ -100,6 +100,9 @@ class Settings:
             "MONGODB_URL", "mongodb://mongo:mongo@localhost:27017/"
         )
 
+        # Discord
+        self.DISCORD_WEBHOOK_URL = self.get_env_variable("DISCORD_WEBHOOK_URL")
+
     def get_env_variable(
         self, var_name: str, default: Optional[str] = None
     ) -> Optional[str]:

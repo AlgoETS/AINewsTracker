@@ -9,6 +9,7 @@ from app.models.article import Article
 from app.core.services.news import NewsFetcher
 from app.core.logging import Logger
 import logging
+import asyncio
 logger = Logger(logging.INFO).get_logger()
 
 # https://finnhub.io/docs/api/websocket-news
@@ -52,7 +53,7 @@ class NewsSeeder:
                 response = await client.get(url)
                 response.raise_for_status()  # Raise an exception if an HTTP error occurred
 
-                news_data = response.json()[:limit]
+                news_data = response.json()
                 return {"articles": news_data}
 
             except httpx.RequestError as e:
@@ -66,10 +67,12 @@ class NewsSeeder:
     @classmethod
     async def create_news(cls, data: List[dict]) -> List[Article]:
         articles = []
+        i = 0
         for article_news in data:
-            logger.info(f"Processing article: {article_news.get('title')}")
+            logger.info(f"Processing article {i}")
             article_processed = await NewsFetcher().process_fmp_article(article_news)
             articles.append(article_processed)
+            i += 1
         return articles
 
     @classmethod
@@ -80,6 +83,19 @@ class NewsSeeder:
 
     @classmethod
     async def seed_news(cls):
-        data = await cls.get_news_data()
-        news_list = await cls.create_news(data["articles"])
-        await create_article(news_list)
+
+        page = 0
+        
+        while True:
+            data = await cls.get_news_data(page=page)
+            logging.info(f"Processing page: {page}")
+            news_list = await cls.create_news(data["articles"])
+            if not news_list:
+                break  
+            
+            await create_article(news_list)
+            
+            
+            page += 1
+            
+            await asyncio.sleep(1)
