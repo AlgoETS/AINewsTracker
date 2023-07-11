@@ -2,6 +2,7 @@
 import logging
 from fastapi import APIRouter, HTTPException, Request
 from app.core.logging import Logger
+from typing import List
 
 logger = Logger(logging.INFO).get_logger()
 
@@ -26,7 +27,7 @@ def create_article_handler(article: Article):
     logger.info(f"Article {article_id} created successfully")
     return {"message": "Article created successfully", "article_id": article_id}
 
-@router.get("/", response_model=list[Article])
+@router.get("/", response_model=List[Article])
 def get_all_articles_handler():
     logger.info("Fetching all articles")
     return get_all_articles()
