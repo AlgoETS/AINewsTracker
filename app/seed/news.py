@@ -65,6 +65,7 @@ class NewsSeeder:
 
     @classmethod
     async def create_news(cls, data: List[dict]) -> List[Article]:
+        logger.info(f"Processing {len(data)} articles")
         articles = []
         for article_news in data:
             logger.info(f"Processing article: {article_news.get('title')}")
@@ -74,12 +75,14 @@ class NewsSeeder:
 
     @classmethod
     async def get_news_and_save_to_csv(cls, filename: str):
+        logger.info(f"Saving news to {filename}")
         data = await cls.get_news_data()
         news_list = cls.create_news(data["articles"])
         cls.generate_csv(news_list, filename)
 
     @classmethod
     async def seed_news(cls):
+        logger.info("Seeding news")
         data = await cls.get_news_data()
         news_list = await cls.create_news(data["articles"])
         await create_article(news_list)
