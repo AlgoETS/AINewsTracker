@@ -120,8 +120,9 @@ class TextMetrics:
         )
         logits = outputs.logits
         probabilities = torch.softmax(logits, dim=1).tolist()[0]
+        logger.info(f"Probabilities: {probabilities}")
         return {
-            "positive": probabilities[2],
+            "positive": probabilities[1],
             "negative": probabilities[0],
-            "neutral": probabilities[1],
+            "neutral": probabilities[2],
         }

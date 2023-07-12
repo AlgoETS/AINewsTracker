@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -18,7 +18,8 @@ class Article(BaseModel):
     comments: Optional[int]
     tickers: Optional[list[str]] = []
     company_id: Optional[str] = None
-    topic: Optional[str] = None
+    topics: Optional[List[str]] = None
+    summary: Optional[str] = None
 
     class Config:
         arbitrary_types_allowed = True

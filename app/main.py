@@ -12,7 +12,6 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from prometheus_fastapi_instrumentator import Instrumentator
 from app.seed.companies import CompanySeeder
-from app.seed.news import NewsSeeder
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
@@ -23,7 +22,7 @@ from app.core.logging import Logger
 from app.core.telemetry.prometheus import check_prometheus_health
 
 # import all routers
-from app.routers import article, company, news, users
+from app.routers import article, company, news, users, seed
 
 startup_time = datetime.now()
 
@@ -44,7 +43,8 @@ swagger_ui_parameters = {
     "oauth2RedirectUrl": "http://localhost:8000/api/v1/docs/oauth2-redirect",
 }
 
-limiter = Limiter(key_func=get_remote_address)
+
+
 
 # Init app
 app = FastAPI(
@@ -57,15 +57,15 @@ app = FastAPI(
     redoc_url=None,
 )
 
-#  Rate Limiting
-app.state.limiter = limiter
-app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
+
 
 # add all routers to app
 app.include_router(users.router)
 app.include_router(company.router)
 app.include_router(article.router)
 app.include_router(news.router)
+app.include_router(seed.router)
+
 
 # CORS
 app.add_middleware(
@@ -78,7 +78,10 @@ app.add_middleware(
 
 # add cache middleware to app
 redis_instance = RedisDB()
-
+#  Rate Limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
 
 @app.on_event("startup")
 async def startup():
@@ -93,16 +96,6 @@ async def startup():
     except Exception:
         logger.error("Redis server not available")
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
-
-    tasks = BackgroundTasks()
-    tasks.add_task(seed_database)
-
-async def seed_database():
-    logger.info("Seeding database...")
-    seed_companies = await CompanySeeder().seed_companies()
-    seed_news = await NewsSeeder().seed_news()
-    logger.info(f"Seeded {seed_companies} companies and {seed_news} news articles")
-
 
 @app.on_event("shutdown")
 async def shutdown_event():

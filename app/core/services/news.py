@@ -53,16 +53,19 @@ class NewsFetcher:
         topics = self.text_metrics.classify_topic(content)
         summary = self.text_metrics.summarize_text(content)
         return Article(
-            id=article_data.get("id"),
-            title=article_data.get("title"),
-            content=content,
-            url=article_data.get("url"),
-            date=datetime.fromisoformat(article_data.get("publishedAt")),
-            sentiment=most_sentiment,
+            title=article_data["title"],
+            url=article_data["link"],
+            publishedDate=article_data["published"],
+            text=content,
+            source_name=article_data["source_name"],
             sentiment_score=most_sentiment_score,
+            sentiment=most_sentiment,
+            author=article_data.get("author"),
+            likes=article_data.get("likes"),
+            comments=article_data.get("comments"),
+            tickers=detected_tickers,
+            topics=topics,
             summary=summary,
-            topic=topics,
-            ticker=detected_tickers,
         )
 
     async def fetch_rss_feed(self, api_key, start_date, end_date, limit=10):
@@ -151,7 +154,7 @@ class NewsFetcher:
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
         if domain.startswith("www."):
-            domain = domain[4:]  # Remove "www." from the domain
+            domain = domain[4:]
         return domain
 
     async def process_fmp_article(self, article_dict: dict):
