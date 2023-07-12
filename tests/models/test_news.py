@@ -4,24 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 
-class News(BaseModel):
-    source_name: str
-    topics: List[str] = []
-    country: str
-    language: str
-    type: str
-    source_url: str
-    id: Optional[str]
-    link: str
-    data: dict
-    number_of_articles: int
-    last_fetch: datetime
-    last_update: datetime
-    last_article: datetime
-
-    class Config:
-        arbitrary_types_allowed = True
-
+from app.models.news import News
 
 def test_news_model():
     """Test the News model"""

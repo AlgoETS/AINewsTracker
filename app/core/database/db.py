@@ -46,6 +46,12 @@ class MongoDB:
             print(f"Connection failed with error: {str(e)}")
             return False
 
+    def check_server_info(self):
+        return self._client.admin.command('serverStatus')
+
+    def check_ping(self):
+        return self._client.admin.command('ping')
+
     def get_info(self):
         return self._client.server_info() if self._client else None
 
@@ -87,6 +93,9 @@ class RedisDB:
 
     def get_info(self):
         return self._connection.info() if self._connection else None
+
+    def get_hostname(self):
+        return settings.REDIS_HOST
 
     def close(self):
         with contextlib.suppress(Exception):

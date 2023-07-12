@@ -1,25 +1,24 @@
-# -*- coding: utf-8 -*-
-from app.models import Company
+from app.models.company import Company
 
 
 def test_company_model():
     """Test the Company model"""
     company = Company(
-        id="1",
+        symbol="TCO",
         name="Test Company",
-        ticker="TCO",
-        description="This is a test company",
-        website="https://testcompany.com",
-        industry="Technology",
         sector="Software",
-        country="USA",
+        subSector="Technology",
+        headQuarter="USA",
+        dateFirstAdded="2023-07-11",
+        cik="0000000000",
+        founded="2000",
     )
 
-    assert company.id == "1"
+    assert company.symbol == "TCO"
     assert company.name == "Test Company"
-    assert company.ticker == "TCO"
-    assert company.description == "This is a test company"
-    assert company.website == "https://testcompany.com"
-    assert company.industry == "Technology"
     assert company.sector == "Software"
-    assert company.country == "USA"
+    assert company.subSector == "Technology"
+    assert company.headQuarter == "USA"
+    assert company.dateFirstAdded == "2023-07-11"
+    assert company.cik == "0000000000"
+    assert company.founded == "2000"

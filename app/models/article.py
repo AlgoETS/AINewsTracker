@@ -20,8 +20,6 @@ class Article(BaseModel):
     company_id: Optional[str] = None
     topic: Optional[str] = None
 
-    
-
     class Config:
         arbitrary_types_allowed = True
 

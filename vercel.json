@@ -1,0 +1,16 @@
+{
+    "devCommand": "poetry run uvicorn app.main:app",
+    "version": 2,
+    "builds": [
+      {
+        "src": "app.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "app/main.py"
+      }
+    ]
+  }

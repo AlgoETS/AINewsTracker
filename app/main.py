@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 import aiofiles
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
@@ -94,6 +94,10 @@ async def startup():
         logger.error("Redis server not available")
         FastAPICache.init(InMemoryBackend(), prefix="inmemory-cache")
 
+    tasks = BackgroundTasks()
+    tasks.add_task(seed_database)
+
+async def seed_database():
     logger.info("Seeding database...")
     seed_companies = await CompanySeeder().seed_companies()
     seed_news = await NewsSeeder().seed_news()
@@ -158,7 +162,7 @@ async def read_health():
         redis_health = get_service_health(
             redis_instance.check_connection,
             redis_instance.get_info,
-            redis_instance.get_hostname(),
+            redis_instance.get_hostname,
         )
 
         mongodb_instance = MongoDB()

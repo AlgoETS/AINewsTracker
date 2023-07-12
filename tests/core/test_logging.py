@@ -6,6 +6,12 @@ import pytest
 from app.core.logging import Logger
 
 
+@pytest.fixture(autouse=True)
+def reset_logger_level():
+    logger_instance = Logger(log_level=logging.INFO)
+    yield
+    logger_instance.set_level(logging.INFO)
+
 def test_logger_singleton():
     logger1 = Logger(log_level=logging.INFO)
     logger2 = Logger(log_level=logging.INFO)

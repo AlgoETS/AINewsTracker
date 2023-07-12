@@ -14,6 +14,7 @@ from app.models import News
 
 from app.core.logging import Logger
 import logging
+from typing import List
 
 logger = Logger(logging.INFO).get_logger()
 
@@ -38,7 +39,7 @@ async def read_news(news_id: str):
     logger.info(f"News item {news_id} fetched successfully")
     return news_item
 
-@router.get("/{news_name}", response_model=list[News])
+@router.get("/{news_name}", response_model=List[News])
 async def read_news_by_name(news_name: str):
     news_items = get_news_by_name(news_name)
     if not news_items:
@@ -80,3 +81,10 @@ async def fetch_entries(background_tasks: BackgroundTasks, source: str, limit: i
         background_tasks.add_task(news_fetcher.fetch_feed_entries, source, limit)
         return {"message": "The task is running in the background."}
     return await news_fetcher.fetch_feed_entries(source, limit)
+
+@router.get("/articles/{source}/{limit}", response_model=List[News])
+async def fetch_articles(background_tasks: BackgroundTasks, source: str, limit: int):
+    if limit > 10:
+        background_tasks.add_task(news_fetcher.fetch_feed_articles, source, limit)
+        return {"message": "The task is running in the background."}
+    return await news_fetcher.fetch_feed_articles(source, limit)

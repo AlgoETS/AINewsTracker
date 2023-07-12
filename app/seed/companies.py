@@ -10,7 +10,6 @@ from app.models.company import Company
 import os
 
 class CompanySeeder:
-    
     settings = Settings()
 
     API_KEY = settings.FMP_API_KEY
