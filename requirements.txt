@@ -29,7 +29,7 @@ et-xmlfile==1.1.0 ; python_full_version >= "3.10.0" and python_full_version < "3
 exceptiongroup==1.1.1 ; python_full_version >= "3.10.0" and python_version < "3.11"
 fastapi-cache2==0.2.1 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
 fastapi-health==0.4.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
-fastapi==0.81.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
+fastapi==0.109.1 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
 feedparser==6.0.10 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
 filelock==3.12.2 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
 finnhub-python==2.4.18 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
