@@ -15,8 +15,10 @@ For any bug reports, feature requests, or other contributions, you can create an
 You can connect with the developers on LinkedIn:
 
 - Antoine Boucher: [https://linkedin.com/in/antoineboucher12](https://linkedin.com/in/antoineboucher12)
-- Mohamed Ilias: [https://linkedin.com/in/mohamedilias](https://linkedin.com/in/mohamedilias)
-- Makhlouf Hennine: [https://linkedin.com/in/makhloufhennine](https://linkedin.com/in/makhloufhennine)
+- Mohamed Ilias: [https://www.linkedin.com/in/mohamed-ilias/](https://www.linkedin.com/in/mohamed-ilias/)
+- Makhlouf Hennine: [https://www.linkedin.com/in/mak-hennine/](https://www.linkedin.com/in/mak-hennine/)
+
+- 
 
 ## Algorithmic Engineering and Data Science Group (algoETS)
 
