@@ -20,14 +20,14 @@ services:
       - "type=caching"
 
   mongo:
-    image: mongo:latest
+    image: mongo:7.0
     container_name: mongo
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=mongo
     ports:
-      - 27017:27017
+      - 27018:27017
     healthcheck:
       test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
       interval: 30s
