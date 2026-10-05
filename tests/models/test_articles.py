@@ -16,6 +16,11 @@ def test_article_model():
         comments="100",
         sentiment_score=0.5,
         sentiment="Positive",
+        sentiment_probabilities={
+            "positive": 0.5,
+            "negative": 0.1,
+            "neutral": 0.4,
+        },
         tickers=["AAPL", "TSLA"],
         company_id=1,
     )
@@ -29,5 +34,10 @@ def test_article_model():
     assert article.source_name == "Test Source"
     assert article.sentiment_score == 0.5
     assert article.sentiment == "Positive"
+    assert article.sentiment_probabilities == {
+        "positive": 0.5,
+        "negative": 0.1,
+        "neutral": 0.4,
+    }
     assert article.tickers == ["AAPL", "TSLA"]
     assert article.company_id == "1"

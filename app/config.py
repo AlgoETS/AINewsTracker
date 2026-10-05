@@ -67,6 +67,12 @@ class Settings:
         self.BASE_URL_FMP_V4 = self.get_env_variable(
             "BASE_URL_FMP_V4", "https://financialmodelingprep.com/api/v4"
         )
+        self.FMP_PUBLISHED_DATE_TIMEZONE = self.get_env_variable(
+            "FMP_PUBLISHED_DATE_TIMEZONE", "UTC"
+        )
+        self.AINEWSTRACKER_SERVICE_TOKEN = self.get_env_variable(
+            "AINEWSTRACKER_SERVICE_TOKEN", ""
+        )
 
         self.BASE_URL_BINANCE = self.get_env_variable(
             "BASE_URL_BINANCE", "https://api.binance.com"

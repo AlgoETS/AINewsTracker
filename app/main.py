@@ -22,7 +22,7 @@ from app.core.logging import Logger
 from app.core.telemetry.prometheus import check_prometheus_health
 
 # import all routers
-from app.routers import article, company, news, users, seed
+from app.routers import article, company, integration, news, users, seed
 
 startup_time = datetime.now()
 
@@ -65,6 +65,7 @@ app.include_router(company.router)
 app.include_router(article.router)
 app.include_router(news.router)
 app.include_router(seed.router)
+app.include_router(integration.router)
 
 
 # CORS

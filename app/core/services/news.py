@@ -2,8 +2,10 @@
 import httpx
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
+from hashlib import sha256
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 import feedparser
 from bs4 import BeautifulSoup
 from app.config import Settings
@@ -15,6 +17,13 @@ from app.models.article import Article
 
 logger = Logger(logging.INFO).get_logger()
 settings = Settings()
+
+
+def normalize_fmp_published_at(value: str, source_timezone: str) -> datetime:
+    published_at = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if published_at.tzinfo is None:
+        published_at = published_at.replace(tzinfo=ZoneInfo(source_timezone))
+    return published_at.astimezone(timezone.utc)
 
 
 class NewsFetcher:
@@ -162,8 +171,22 @@ class NewsFetcher:
         sentiment = self.text_metrics.analyze_sentiment(content)
         most_sentiment = max(sentiment, key=sentiment.get)
         most_sentiment_score = sentiment[most_sentiment]
+        published_date = article_dict["publishedDate"]
         article_dict["source_name"] = self.extract_source(article_dict["url"])
+        article_dict["article_id"] = f"fmp_{sha256(article_dict['url'].encode()).hexdigest()}"
+        article_dict["published_at"] = normalize_fmp_published_at(
+            published_date, settings.FMP_PUBLISHED_DATE_TIMEZONE
+        )
+        article_dict["ingested_at"] = datetime.now(timezone.utc)
         article_dict["sentiment"] = most_sentiment
         article_dict["sentiment_score"] = most_sentiment_score
+        article_dict["sentiment_probabilities"] = sentiment
+        model_config = getattr(getattr(self.text_metrics, "sentiment_model", None), "config", None)
+        article_dict["model_name"] = getattr(
+            model_config, "_name_or_path", "ProsusAI/finbert"
+        )
+        article_dict["model_version"] = getattr(
+            model_config, "_commit_hash", None
+        ) or "unknown"
         article_dict["tickers"] = [article_dict["symbol"]]
         return Article(**article_dict)

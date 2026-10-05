@@ -1,5 +1,6 @@
 import logging
-from typing import Optional, List
+from datetime import datetime
+from typing import List, Optional
 from app.core.database.db import MongoDB
 from app.models.article import Article
 from bson.objectid import ObjectId
@@ -32,6 +33,46 @@ async def create_article(articles: List[Article]):
 async def get_all_articles() -> List[Article]:
     articles = await collection.find().to_list(length=100)
     logger.info("Articles fetched successfully")
+    return [Article(**article) for article in articles]
+
+
+async def get_articles_for_integration(
+    symbols: List[str],
+    from_time: Optional[datetime],
+    to_time: Optional[datetime],
+    cursor_published_at: Optional[datetime],
+    cursor_article_id: Optional[str],
+    limit: int,
+) -> List[Article]:
+    filters = [
+        {"article_id": {"$exists": True, "$ne": None}},
+        {"published_at": {"$exists": True, "$ne": None}},
+        {"ingested_at": {"$exists": True, "$ne": None}},
+        {"sentiment_probabilities": {"$exists": True, "$ne": None}},
+    ]
+    if symbols:
+        filters.append({"tickers": {"$in": symbols}})
+    if from_time is not None:
+        filters.append({"published_at": {"$gte": from_time}})
+    if to_time is not None:
+        filters.append({"published_at": {"$lt": to_time}})
+    if cursor_published_at is not None and cursor_article_id is not None:
+        filters.append(
+            {
+                "$or": [
+                    {"published_at": {"$gt": cursor_published_at}},
+                    {
+                        "published_at": cursor_published_at,
+                        "article_id": {"$gt": cursor_article_id},
+                    },
+                ]
+            }
+        )
+
+    cursor = collection.find({"$and": filters}).sort(
+        [("published_at", 1), ("article_id", 1)]
+    )
+    articles = await cursor.to_list(length=limit + 1)
     return [Article(**article) for article in articles]
 
 async def get_article_by_id(article_id: str) -> Optional[Article]:
