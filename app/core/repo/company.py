@@ -10,10 +10,11 @@ import logging
 
 logger = Logger(logging.INFO).get_logger()
 
-mongo_db = MongoDB()
-collection = mongo_db.get_collection("companies")
+def get_company_collection():
+    return MongoDB().get_collection("companies")
 
 async def create_company(company: Company):
+    collection = get_company_collection()
     logger.info("Creating company")
     company_dict = company.dict()
     company_dict["_id"] = str(ObjectId())
@@ -21,6 +22,7 @@ async def create_company(company: Company):
     return result.inserted_id
 
 async def create_companies(companies: List[Company]):
+    collection = get_company_collection()
     logger.info("Creating companies")
     companies = [dict(item.dict()) for item in companies]
     inserted_ids = []
@@ -38,11 +40,13 @@ async def create_companies(companies: List[Company]):
     return inserted_ids
 
 async def get_all_companies() -> List[Company]:
+    collection = get_company_collection()
     logger.info("Fetching all companies")
     companies = await collection.find().to_list(length=100)  # specify max limit here
     return [Company(**company) for company in companies]
 
 async def get_company_by_ticker(ticker: str) -> Optional[Company]:
+    collection = get_company_collection()
     logger.info(f"Fetching company {ticker}")
     company = await collection.find_one({"ticker": ticker})
     return Company(**company) if company else None

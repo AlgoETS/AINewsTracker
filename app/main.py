@@ -12,6 +12,7 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 from prometheus_fastapi_instrumentator import Instrumentator
 from app.seed.companies import CompanySeeder
+from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
@@ -82,13 +83,15 @@ redis_instance = RedisDB()
 #  Rate Limiting
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
-app.add_exception_handler(HTTPException, _rate_limit_exceeded_handler)
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 @app.on_event("startup")
 async def startup():
     global startup_time
     startup_time = datetime.now()
     logger.info("Starting up application...")
+
+    await MongoDB().connect()
 
     try:
         FastAPICache.init(

@@ -16,8 +16,8 @@ ALGORITHM = settings.ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-mongo_db = MongoDB()
-user_collection = mongo_db.get_collection("users")
+def get_user_collection():
+    return MongoDB().get_collection("users")
 
 class TokenData(BaseModel):
     email: Optional[str] = None
@@ -57,13 +57,15 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 def get_user(email: str) -> Optional[UserDTO]:
+    user_collection = get_user_collection()
     if user := user_collection.find_one({"email": email}):
         return UserDTO(**user)
     return None
 
 def get_user_by_email(email: str):
-        return MongoDB().get_collection("users").find_one({"email": email})
+        return get_user_collection().find_one({"email": email})
 
 def insert_new_user(user: dict):
+    user_collection = get_user_collection()
     user_collection.insert_one(user)
     return UserDTO(**user)

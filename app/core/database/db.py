@@ -20,21 +20,28 @@ class MongoDB:
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._client = AsyncIOMotorClient(settings.MONGODB_URL)
-            cls._instance._db = cls._instance._client["AINewsTracker"]
-            cls._instance.create_collections(
-                ["companies", "articles", "news_feed", "users"]
-            )
+            cls._instance._client = None
+            cls._instance._db = None
+            cls._instance._collections = {}
         return cls._instance
 
-    def create_collections(self, collection_names):
+    async def connect(self):
+        if self._client is not None:
+            return
+
+        self._client = AsyncIOMotorClient(settings.MONGODB_URL, tz_aware=True)
+        self._db = self._client["AINewsTracker"]
+        await self.create_collections(["companies", "articles", "news_feed", "users"])
+
+    async def create_collections(self, collection_names):
         self._collections = {name: self._db[name] for name in collection_names}
 
-        # Create index on "symbol" key for the "companies" collection
-        self._collections["companies"].create_index([("symbol", ASCENDING)])
-        self._collections["articles"].create_index([("url", ASCENDING)])
+        await self._collections["companies"].create_index([("symbol", ASCENDING)])
+        await self._collections["articles"].create_index([("url", ASCENDING)])
 
     def get_collection(self, collection_name):
+        if self._client is None:
+            raise RuntimeError("MongoDB is not connected")
         return self._collections.get(collection_name, None)
 
     async def check_connection(self):
@@ -56,7 +63,11 @@ class MongoDB:
         return self._client.server_info() if self._client else None
 
     def close(self):
-        self._client.close()
+        if self._client is not None:
+            self._client.close()
+        self._client = None
+        self._db = None
+        self._collections = {}
 
 
 class RedisDB:
