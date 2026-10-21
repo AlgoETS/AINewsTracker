@@ -92,7 +92,7 @@ rfc3986[idna2008]==1.5.0 ; python_full_version >= "3.10.0" and python_full_versi
 rich==13.4.2 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
 rsa==4.9 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4"
 safetensors==0.3.1 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
-setuptools==68.0.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
+setuptools==83.0.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
 sgmllib3k==1.0.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_full_version < "4.0.0"
 six==1.16.0 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
 slowapi==0.1.8 ; python_full_version >= "3.10.0" and python_full_version < "3.11.0" or python_full_version >= "3.12.0" and python_version < "4.0"
