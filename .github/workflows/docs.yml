@@ -40,13 +40,14 @@ jobs:
           poetry-version: "1.5.0"
 
       - name: Install project dependencies
-        run: poetry install
+        run: poetry install --only dev --no-root
 
       - name: Build mkdocs
         run: poetry run mkdocs build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.TOKEN }}
           publish_dir: ./site
